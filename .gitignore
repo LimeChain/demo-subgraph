@@ -1,3 +1,9 @@
+# Matchstick binaries
+tests/.bin/
+
+# Graph CLI
+generated/
+
 # Logs
 logs
 *.log
