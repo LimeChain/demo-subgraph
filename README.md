@@ -1,11 +1,11 @@
-# Demo Subgraph (The Graph) showcasing unit testing with Matchstick!
+# Demo Subgraph (The Graph) showcasing unit testing with matchstick!
 
-❗ This repository reflects the changes made in the latest version of [Matchstick](https://github.com/LimeChain/matchstick/) (a.k.a. it follows the main branch).
+❗ This repository reflects the changes made in the latest version of [matchstick](https://github.com/LimeChain/matchstick/) (a.k.a. it follows the main branch).
 
 ## Help
 ```sh
 $ ./matchstick -h
-Matchstick 🔥 x.y.z
+matchstick 🔥 x.y.z
 Limechain <https://limechain.tech>
 Unit testing framework for Subgraph development on The Graph protocol.
 
@@ -24,7 +24,7 @@ ARGS:
 
 ### Directory structure
 
-For Matchstick to recognize your tests, you need to put them in a `tests/` folder in the root of your project.
+For *matchstick* to recognize your tests, you need to put them in a `tests/` folder in the root of your project.
 
 ### Naming
 
