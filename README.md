@@ -37,7 +37,7 @@ tests/
 1 file
 ```
 
---
+---
 
 If you want to group unit tests in subfolders, name the subfolders as your data sources are named.
 For example:
@@ -54,4 +54,4 @@ Now, under the `gravity` folder, all files ending with `.test.ts` are interprete
 
 ## Caveats
 
- - Matchstick is case-insensitive regarding data sources names. Meaning, *Gravity = gravity = gRaVitY*.
+ - **Matchstick** is case-insensitive regarding data sources names. Meaning, *Gravity = gravity = gRaVitY*.
