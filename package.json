@@ -15,7 +15,7 @@
   "devDependencies": {
     "@graphprotocol/graph-cli": "^0.22.1",
     "@graphprotocol/graph-ts": "^0.22.1",
-    "matchstick-as": "github:LimeChain/matchstick-as"
+    "matchstick-as": "file:../matchstick-as"
   },
   "dependencies": {
     "babel-polyfill": "^6.26.0",
