@@ -1,7 +1,7 @@
 {
   "name": "example",
   "version": "0.1.0",
-  "repository": "https://github.com/graphprotocol/example-subgraph",
+  "repository": "https://github.com/LimeChain/demo-subgraph",
   "license": "MIT",
   "scripts": {
     "build-contract": "solc contracts/Gravity.sol --abi -o abis --overwrite && solc contracts/Gravity.sol --bin -o bin --overwrite",
@@ -15,7 +15,7 @@
   "devDependencies": {
     "@graphprotocol/graph-cli": "^0.22.1",
     "@graphprotocol/graph-ts": "^0.22.1",
-    "matchstick-as": "github:LimeChain/matchstick-as"
+    "matchstick-as": "git://github.com/LimeChain/matchstick-as.git#2422dd5f6cb045a2cf4ca24664a8bf1ea04a32ad"
   },
   "dependencies": {
     "babel-polyfill": "^6.26.0",
