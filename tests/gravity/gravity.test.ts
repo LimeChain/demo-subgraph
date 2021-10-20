@@ -1,12 +1,13 @@
-import { assert, createMockedFunction, clearStore, test, newMockEvent } from "matchstick-as/assembly/index"
+import { assert, createMockedFunction, clearStore, test, newMockEvent, newMockCall } from "matchstick-as/assembly/index"
 import { Address, BigInt, Bytes, ethereum, store, Value } from "@graphprotocol/graph-ts"
 
 import { createNewGravatarEvent } from "./utils"
 import { Gravatar } from "../../generated/schema"
-import { Gravity, NewGravatar } from "../../generated/Gravity/Gravity"
-import { handleNewGravatars, saveGravatarFromContract, trySaveGravatarFromContract } from "../../src/mapping"
+import { Gravity, NewGravatar, CreateGravatarCall } from "../../generated/Gravity/Gravity"
+import { handleNewGravatars, saveGravatarFromContract, trySaveGravatarFromContract, handleCreateGravatar } from "../../src/mapping"
 
 let GRAVATAR_ENTITY_TYPE = "Gravatar"
+let TRANSACTION_ENTITY_TYPE = "Transaction"
 
 export function runTests(): void {
   test("Can mock and call function with different argument types", () => {
@@ -141,9 +142,7 @@ export function runTests(): void {
   })
   
   test("Can initialise event with default metadata", () => {
-    let mockEvent = newMockEvent()
-    let newGravatarEvent = new NewGravatar(mockEvent.address, mockEvent.logIndex, mockEvent.transactionLogIndex,
-        mockEvent.logType, mockEvent.block, mockEvent.transaction, mockEvent.parameters)
+    let newGravatarEvent = changetype<NewGravatar>(newMockEvent())
   
     let DEFAULT_LOG_TYPE = "default_log_type"
     let DEFAULT_ADDRESS = "0xA16081F360e3847006dB660bae1c6d1b2e17eC2A"
@@ -161,9 +160,7 @@ export function runTests(): void {
   })
   
   test("Can update event metadata", () => {
-    let mockEvent = newMockEvent()
-    let newGravatarEvent = new NewGravatar(mockEvent.address, mockEvent.logIndex, mockEvent.transactionLogIndex,
-        mockEvent.logType, mockEvent.block, mockEvent.transaction, mockEvent.parameters)
+    let newGravatarEvent = changetype<NewGravatar>(newMockEvent())
   
     let UPDATED_LOG_TYPE = "updated_log_type"
     let UPDATED_ADDRESS = "0xB16081F360e3847006dB660bae1c6d1b2e17eC2A"
@@ -207,5 +204,14 @@ export function runTests(): void {
   
     assert.fieldEquals(GRAVATAR_ENTITY_TYPE, "48", "value0", "1st val")
     assert.fieldEquals(GRAVATAR_ENTITY_TYPE, "48", "value1", "2nd val")
+  })
+
+  test("Can save transaction from call handler", () => {
+    let call = changetype<CreateGravatarCall>(newMockCall())
+    call.inputValues = [new ethereum.EventParam("displayName", ethereum.Value.fromString("name")), new ethereum.EventParam("imageUrl", ethereum.Value.fromString("example.com"))]
+    handleCreateGravatar(call)
+
+    assert.fieldEquals(TRANSACTION_ENTITY_TYPE, "0xa16081f360e3847006db660bae1c6d1b2e17ec2a", "displayName", "name")
+    assert.fieldEquals(TRANSACTION_ENTITY_TYPE, "0xa16081f360e3847006db660bae1c6d1b2e17ec2a", "imageUrl", "example.com")
   })
 }
