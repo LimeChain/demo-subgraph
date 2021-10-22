@@ -1,6 +1,6 @@
 specVersion: 0.0.2
-description: Gravatar for Ethereum
-repository: https://github.com/graphprotocol/example-subgraph
+description: Example subgraph using Matchstick
+repository: https://github.com/LimeChain/demo-subgraph
 schema:
   file: ./schema.graphql
 dataSources:
@@ -16,6 +16,7 @@ dataSources:
       language: wasm/assemblyscript
       entities:
         - Gravatar
+        - Transaction
       abis:
         - name: Gravity
           file: ./abis/Gravity.json
@@ -24,6 +25,9 @@ dataSources:
           handler: handleNewGravatar
         - event: UpdatedGravatar(uint256,address,string,string)
           handler: handleUpdatedGravatar
+      callHandlers:
+        - function: createGravatar(string,string)
+          handler: handleCreateGravatar
       file: ./src/gravity.ts
   - kind: ethereum/contract
     name: cryptopunks

@@ -1,12 +1,13 @@
-import { assert, createMockedFunction, clearStore, test, newMockEvent } from "matchstick-as/assembly/index"
+import { assert, createMockedFunction, clearStore, test, newMockEvent, newMockCall } from "matchstick-as/assembly/index"
 import { Address, BigInt, Bytes, ethereum, store, Value } from "@graphprotocol/graph-ts"
 
 import { createNewGravatarEvent } from "./utils"
 import { Gravatar } from "../../generated/schema"
-import { Gravity, NewGravatar } from "../../generated/Gravity/Gravity"
-import { handleNewGravatars, saveGravatarFromContract, trySaveGravatarFromContract } from "../../src/gravity"
+import { Gravity, NewGravatar, CreateGravatarCall } from "../../generated/Gravity/Gravity"
+import { handleNewGravatars, saveGravatarFromContract, trySaveGravatarFromContract, handleCreateGravatar } from "../../src/gravity"
 
 let GRAVATAR_ENTITY_TYPE = "Gravatar"
+let TRANSACTION_ENTITY_TYPE = "Transaction"
 
 test("Can mock and call function with different argument types", () => {
   let numValue = ethereum.Value.fromI32(152)
@@ -17,8 +18,8 @@ test("Can mock and call function with different argument types", () => {
 
   let argsArray: Array<ethereum.Value> = [numValue, stringValue, arrayValue, booleanValue, objectValue]
   createMockedFunction(Address.fromString("0x90cBa2Bbb19ecc291A12066Fd8329D65FA1f1947"), "funcName", "funcName():(void)")
-      .withArgs(argsArray)
-      .returns([ethereum.Value.fromString("result")])
+    .withArgs(argsArray)
+    .returns([ethereum.Value.fromString("result")])
   let val = ethereum.call(new ethereum.SmartContractCall("conName", Address.fromString("0x90cBa2Bbb19ecc291A12066Fd8329D65FA1f1947"), "funcName", "funcName():(void)", argsArray))![0]
 
   assert.equals(ethereum.Value.fromString("result"), val)
@@ -36,8 +37,8 @@ test("Can mock gravity function correctly", () => {
   let expectedResult = Address.fromString("0x90cBa2Bbb19ecc291A12066Fd8329D65FA1f1947")
   let bigIntParam = BigInt.fromString("1234")
   createMockedFunction(contractAddress, "gravatarToOwner", "gravatarToOwner(uint256):(address)")
-      .withArgs([ethereum.Value.fromSignedBigInt(bigIntParam)])
-      .returns([ethereum.Value.fromAddress(Address.fromString("0x90cBa2Bbb19ecc291A12066Fd8329D65FA1f1947"))])
+    .withArgs([ethereum.Value.fromSignedBigInt(bigIntParam)])
+    .returns([ethereum.Value.fromAddress(Address.fromString("0x90cBa2Bbb19ecc291A12066Fd8329D65FA1f1947"))])
 
   let gravity = Gravity.bind(contractAddress)
   let result = gravity.gravatarToOwner(bigIntParam)
@@ -140,9 +141,7 @@ test("Can add, get, assert and remove from store", () => {
 })
 
 test("Can initialise event with default metadata", () => {
-  let mockEvent = newMockEvent()
-  let newGravatarEvent = new NewGravatar(mockEvent.address, mockEvent.logIndex, mockEvent.transactionLogIndex,
-      mockEvent.logType, mockEvent.block, mockEvent.transaction, mockEvent.parameters)
+  let newGravatarEvent = changetype<NewGravatar>(newMockEvent())
 
   let DEFAULT_LOG_TYPE = "default_log_type"
   let DEFAULT_ADDRESS = "0xA16081F360e3847006dB660bae1c6d1b2e17eC2A"
@@ -160,9 +159,7 @@ test("Can initialise event with default metadata", () => {
 })
 
 test("Can update event metadata", () => {
-  let mockEvent = newMockEvent()
-  let newGravatarEvent = new NewGravatar(mockEvent.address, mockEvent.logIndex, mockEvent.transactionLogIndex,
-      mockEvent.logType, mockEvent.block, mockEvent.transaction, mockEvent.parameters)
+  let newGravatarEvent = changetype<NewGravatar>(newMockEvent())
 
   let UPDATED_LOG_TYPE = "updated_log_type"
   let UPDATED_ADDRESS = "0xB16081F360e3847006dB660bae1c6d1b2e17eC2A"
@@ -189,8 +186,8 @@ test("Can update event metadata", () => {
 test("Can save gravatar from contract", () => {
   let contractAddress = Address.fromString("0x89205A3A3b2A69De6Dbf7f01ED13B2108B2c43e7")
   createMockedFunction(contractAddress, "getGravatar", "getGravatar(address):(string,string)")
-      .withArgs([ethereum.Value.fromAddress(contractAddress)])
-      .returns([ethereum.Value.fromString("1st val"), ethereum.Value.fromString("2nd val")])
+    .withArgs([ethereum.Value.fromAddress(contractAddress)])
+    .returns([ethereum.Value.fromString("1st val"), ethereum.Value.fromString("2nd val")])
   saveGravatarFromContract("48")
 
   assert.fieldEquals(GRAVATAR_ENTITY_TYPE, "48", "value0", "1st val")
@@ -200,11 +197,19 @@ test("Can save gravatar from contract", () => {
 test("Can fail gracefully when saving gravatar from contract with try_getGravatar", () => {
   let contractAddress = Address.fromString("0x89205A3A3b2A69De6Dbf7f01ED13B2108B2c43e7")
   createMockedFunction(contractAddress, "getGravatar", "getGravatar(address):(string,string)")
-      .withArgs([ethereum.Value.fromAddress(contractAddress)])
-      .reverts()
+    .withArgs([ethereum.Value.fromAddress(contractAddress)])
+    .reverts()
   trySaveGravatarFromContract("48")
 
   assert.fieldEquals(GRAVATAR_ENTITY_TYPE, "48", "value0", "1st val")
   assert.fieldEquals(GRAVATAR_ENTITY_TYPE, "48", "value1", "2nd val")
 })
 
+test("Can save transaction from call handler", () => {
+  let call = changetype<CreateGravatarCall>(newMockCall())
+  call.inputValues = [new ethereum.EventParam("displayName", ethereum.Value.fromString("name")), new ethereum.EventParam("imageUrl", ethereum.Value.fromString("example.com"))]
+  handleCreateGravatar(call)
+
+  assert.fieldEquals(TRANSACTION_ENTITY_TYPE, "0xa16081f360e3847006db660bae1c6d1b2e17ec2a", "displayName", "name")
+  assert.fieldEquals(TRANSACTION_ENTITY_TYPE, "0xa16081f360e3847006db660bae1c6d1b2e17ec2a", "imageUrl", "example.com")
+})

@@ -5,6 +5,12 @@ type Gravatar @entity {
   imageUrl: String!
 }
 
+type Transaction @entity {
+  id: ID!
+  displayName: String!
+  imageUrl: String!
+}
+
 enum TraitType {
   TYPE
   ACCESSORY
@@ -290,4 +296,3 @@ type Unwrap implements Event @entity {
   txHash: Bytes!
   timestamp: BigInt!
   type: EventType!
-}
