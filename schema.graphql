@@ -296,3 +296,4 @@ type Unwrap implements Event @entity {
   txHash: Bytes!
   timestamp: BigInt!
   type: EventType!
+}
