@@ -4,7 +4,7 @@ import { Address, BigInt, Bytes, ethereum, store, Value } from "@graphprotocol/g
 import { createNewGravatarEvent } from "./utils"
 import { Gravatar } from "../../generated/schema"
 import { Gravity, NewGravatar } from "../../generated/Gravity/Gravity"
-import { handleNewGravatars, saveGravatarFromContract, trySaveGravatarFromContract } from "../../src/mapping"
+import { handleNewGravatars, saveGravatarFromContract, trySaveGravatarFromContract } from "../../src/gravity"
 
 let GRAVATAR_ENTITY_TYPE = "Gravatar"
 
