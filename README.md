@@ -5,19 +5,19 @@
 ## Help
 ```sh
 $ ./matchstick -h
-Matchstick 🔥 x.y.z
+Matchstick 🔥 0.2.0
 Limechain <https://limechain.tech>
 Unit testing framework for Subgraph development on The Graph protocol.
 
 USAGE:
-    matchstick [datasources]...
+    matchstick [test_names]...
 
 FLAGS:
     -h, --help       Prints help information
     -V, --version    Prints version information
 
 ARGS:
-    <datasources>...    Please specify the names of the data sources you would like to test.
+    <test_names>...    Please specify the names of the tests you would like to run.
 ```
 
 ## Conventions
@@ -28,8 +28,8 @@ For **Matchstick** to recognize your tests, you need to put them in a `tests/` f
 
 ### Naming
 
-Your test file should start with the name of your data source and end with `.test.ts`.
-For example:
+Your test file should start with a name of your chosing (for example the name of the tested data source) and end with `.test.ts`.
+For instance:
 ```
 tests/
 └── gravity.test.ts
@@ -39,7 +39,7 @@ tests/
 
 ---
 
-If you want to group unit tests in subfolders, name the subfolders as your data sources are named.
+You can also group related tests and other files into folders.
 For example:
 ```
 tests/
@@ -50,7 +50,7 @@ tests/
 1 directory, 2 files
 ```
 
-Now, under the `gravity` folder, all files ending with `.test.ts` are interpreted as unit tests for the `Gravity` data source.
+Now, under the `gravity` folder, all files ending with `.test.ts` are interpreted as a single test with the name `gravity` (the name of the folder).
 
 ## Caveats
 
