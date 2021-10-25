@@ -1,5 +1,5 @@
 specVersion: 0.0.2
-description: Example subgraph using Matchstick
+description: Demo Subgraph showcasing unit testing with Matchstick!
 repository: https://github.com/LimeChain/demo-subgraph
 schema:
   file: ./schema.graphql
