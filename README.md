@@ -40,7 +40,7 @@ tests/
 1 file
 ```
 
-The test suite name is: `gravity`.
+Now, according to Matchstick, there exists a test suite named `gravity`.
 
 ---
 
@@ -55,7 +55,7 @@ tests/
 1 directory, 2 files
 ```
 
-Now, under the `gravity` folder, all files ending with `.test.ts` are interpreted as a single test suite with the name `gravity` (the name of the folder).
+Now, under the `gravity` folder, all files ending with `.test.ts` are interpreted as a single test suite named `gravity` (the name of the folder).
 
 ## Caveats
 
