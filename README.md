@@ -44,7 +44,7 @@ Now, according to Matchstick, there exists a test suite named `gravity`.
 
 ---
 
-As mentioned, you can also group related tests and other files into folders.
+As mentioned, you can group related tests and other files into folders.
 For example:
 ```
 tests/
@@ -55,7 +55,7 @@ tests/
 1 directory, 2 files
 ```
 
-Now, under the `gravity` folder, all files ending with `.test.ts` are interpreted as a single test suite named `gravity` (the name of the folder).
+Now all files, under the `gravity` folder, ending with `.test.ts` are interpreted as a single test suite named `gravity` (the folder name).
 
 ## Caveats
 
