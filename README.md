@@ -26,7 +26,7 @@ ARGS:
 
 For **Matchstick** to recognize your test suites, you need to put them in a `tests/` folder in the root of your project.
 
-**NOTE**: A *Test Suite* is simply a collection of `test(...)` function calls. They can be put into a single file or
+***NOTE***: A *Test Suite* is simply a collection of `test(...)` function calls. They can be put into a single file or
 many files grouped into a directory.
 
 ### Naming
