@@ -35,4 +35,3 @@ jobs:
     - run: npm ci
     - run: npm run codegen
     - run: npm run build
-    - run: npm run test
