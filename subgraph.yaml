@@ -94,7 +94,7 @@ dataSources:
         - Unpaused
       abis:
         - name: WrappedPunks
-          file: ./abis/WrappedPunks.json
+          file: ./abis/wrappedpunks.json
       eventHandlers:
         - event: Transfer(indexed address,indexed address,indexed uint256)
           handler: handleWrappedPunkTransfer
