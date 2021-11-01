@@ -3,6 +3,7 @@ import { Address, BigInt, Bytes, ethereum, store, Value } from "@graphprotocol/g
 
 import { createNewGravatarEvent } from "./utils"
 import { Gravatar } from "../../generated/schema"
+import { KashiPair } from "../../generated/templates"
 import { Gravity, NewGravatar, CreateGravatarCall } from "../../generated/Gravity/Gravity"
 import { handleNewGravatars, saveGravatarFromContract, trySaveGravatarFromContract, handleCreateGravatar } from "../../src/gravity"
 
@@ -215,10 +216,5 @@ test("Can save transaction from call handler", () => {
 })
 
 test("datasource", () => {
-  let call = changetype<CreateGravatarCall>(newMockCall())
-  call.inputValues = [new ethereum.EventParam("displayName", ethereum.Value.fromString("name")), new ethereum.EventParam("imageUrl", ethereum.Value.fromString("example.com"))]
-  handleCreateGravatar(call)
-
-  assert.fieldEquals(TRANSACTION_ENTITY_TYPE, "0xa16081f360e3847006db660bae1c6d1b2e17ec2a", "displayName", "name")
-  assert.fieldEquals(TRANSACTION_ENTITY_TYPE, "0xa16081f360e3847006db660bae1c6d1b2e17ec2a", "imageUrl", "example.com")
+  KashiPair.create(Address.fromString("0xB16081F360e3847006dB660bae1c6d1b2e17eC2A"))
 })
