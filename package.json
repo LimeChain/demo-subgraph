@@ -13,7 +13,7 @@
   "dependencies": {
     "@graphprotocol/graph-cli": "^0.22.1",
     "@graphprotocol/graph-ts": "^0.22.1",
-    "matchstick-as": "git://github.com/LimeChain/matchstick-as.git",
+    "matchstick-as": "git://github.com/LimeChain/matchstick-as.git#b9d6988a07923b8286d8c38ef25581368570bc2a",
     "keytar": "^7.4.0"
   }
 }
