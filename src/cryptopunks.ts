@@ -415,9 +415,6 @@ export function handlePunkOffered(event: PunkOffered): void {
     );
   }
   ask.from = account.id;
-  if (!ask) {
-    ask.open = true;
-  }
   ask.nft = event.params.punkIndex.toString();
   ask.from = account.id;
   ask.created = askCreated.id;
@@ -513,9 +510,6 @@ export function handlePunkBidEntered(event: PunkBidEntered): void {
     );
   }
 
-  if (!bid) {
-    bid.open = true;
-  }
   bid.nft = event.params.punkIndex.toString();
   bid.created = bidCreated.id;
   bid.removed = bidRemoved.id;

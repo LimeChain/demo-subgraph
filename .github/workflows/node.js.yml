@@ -32,7 +32,7 @@ jobs:
       run: >
           git config --global url."https://github.com/".insteadOf
           ssh://git@github.com/
-    - run: npm ci
-    - run: npm run codegen
-    - run: npm run build
-    - run: npm run test
+    - run: yarn
+    - run: yarn codegen
+    - run: yarn build
+    - run: yarn test
