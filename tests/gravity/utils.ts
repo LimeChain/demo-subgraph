@@ -36,9 +36,7 @@ export function trySaveGravatarFromContract(gravatarId: string): void {
 }
 
 export function createNewGravatarEvent(id: i32, ownerAddress: string, displayName: string, imageUrl: string): NewGravatar {
-    let mockEvent = newMockEvent()
-    let newGravatarEvent = new NewGravatar(mockEvent.address, mockEvent.logIndex, mockEvent.transactionLogIndex,
-        mockEvent.logType, mockEvent.block, mockEvent.transaction, mockEvent.parameters)
+    let newGravatarEvent = changetype<NewGravatar>(newMockEvent())
     newGravatarEvent.parameters = new Array()
     let idParam = new ethereum.EventParam("id", ethereum.Value.fromI32(id))
     let addressParam = new ethereum.EventParam("ownderAddress", ethereum.Value.fromAddress(Address.fromString(ownerAddress)))
