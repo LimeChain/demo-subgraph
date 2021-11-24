@@ -425,3 +425,13 @@ Logging critical errors will stop the execution of the tests and blow everything
 The log output includes the test run duration. Here's an example:
 
 `Jul 09 14:54:42.420 INFO Program execution time: 10.06022ms`
+
+## Test Coverage (Linux and MacOS)
+Using Matchstick, subgraph developers are able to run a script that will calculate the test coverage of the written unit tests. The tool only works on Linux and Mac, but when we add support for Docker users should be able to use it on any machine with almost any OS. 
+
+The test coverage tool is really simple - it takes the compiled test `wasm` binaries and converts them to `wat` files, which can then be easily inspected to see whether or not the handlers defined in `subgraph.yaml` have actually been called or not. Since code coverage (and testing as whole) is in very early stages in AssemblyScript and WebAssembly, Matchstick doesn't check for branch coverage. Instead we rely on the assertion that if a given handler has been called, the event/function for it have been properly mocked.
+
+### Prerequisites
+To run the test coverage functionality provided in Matchstick, there are a few things you need to prepare beforehand:
+
+#### 1. Install Cmake
