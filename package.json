@@ -8,7 +8,8 @@
     "build": "graph build",
     "create-local": "graph create demo --node http://127.0.0.1:8020",
     "deploy-local": "graph deploy demo --ipfs http://localhost:5001 --node http://127.0.0.1:8020",
-    "test": "graph test gravity"
+    "test": "graph test gravity",
+    "coverage": "graph test -- -c"
   },
   "dependencies": {
     "@graphprotocol/graph-cli": "^0.23.1",

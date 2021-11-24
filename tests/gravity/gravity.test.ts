@@ -4,7 +4,10 @@ import { Address, BigInt, Bytes, ethereum, store, Value } from "@graphprotocol/g
 import { handleNewGravatars, createNewGravatarEvent, trySaveGravatarFromContract, saveGravatarFromContract } from "./utils"
 import { Gravatar } from "../../generated/schema"
 import { Gravity, NewGravatar, CreateGravatarCall } from "../../generated/Gravity/Gravity"
-import { handleCreateGravatar } from "../../src/gravity"
+import { handleCreateGravatar, handleNewGravatar } from "../../src/gravity"
+
+// Coverage
+export { handleCreateGravatar, handleNewGravatar };
 
 let GRAVATAR_ENTITY_TYPE = "Gravatar"
 let TRANSACTION_ENTITY_TYPE = "Transaction"
