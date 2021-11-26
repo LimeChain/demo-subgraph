@@ -4,6 +4,7 @@ RUN apt update
 RUN apt install -y nodejs
 RUN apt install -y npm
 COPY ./ ./
+RUN npm run codegen
 RUN npm run build
 RUN apt install -y postgresql
 RUN apt install -y curl
