@@ -23,10 +23,10 @@
     "chalk" "^2.0.0"
     "js-tokens" "^4.0.0"
 
-"@graphprotocol/graph-cli@^0.22.1":
-  "integrity" "sha512-+2OcByjz0k9F2guz6hQ6lRiWBrRj/Pc5ShIZjK69P1w3eICQtFn/F1j5zTbeWkr/tL//e2byf0MIxxMBo2xToQ=="
-  "resolved" "https://registry.npmjs.org/@graphprotocol/graph-cli/-/graph-cli-0.22.4.tgz"
-  "version" "0.22.4"
+"@graphprotocol/graph-cli@^0.23.1":
+  "integrity" "sha512-1JDyCwaAIeKsEPYPlsJ7IiAB5BhQ+v2fvmDIJTcLfRIYmTKsoETdjrw9qUGJtjICVXIGuL9DeNVhQgKgTMCQZQ=="
+  "resolved" "https://registry.npmjs.org/@graphprotocol/graph-cli/-/graph-cli-0.23.2.tgz"
+  "version" "0.23.2"
   dependencies:
     "assemblyscript" "0.19.10"
     "binary-install-raw" "0.0.13"
@@ -52,17 +52,10 @@
     "which" "2.0.2"
     "yaml" "^1.5.1"
 
-"@graphprotocol/graph-ts@^0.22.1":
-  "integrity" "sha512-T5xrHN0tHJwd7ZnSTLhk5hAL3rCIp6rJ40kBCrETnv1mfK9hVyoojJK6VtBQXTbLsYtKe4SYjjD0cdOsAR9QiA=="
-  "resolved" "https://registry.npmjs.org/@graphprotocol/graph-ts/-/graph-ts-0.22.1.tgz"
-  "version" "0.22.1"
-  dependencies:
-    "assemblyscript" "0.19.10"
-
-"@graphprotocol/graph-ts@0.22.0":
-  "integrity" "sha512-kJIBL73xBxj0+NJdRABukAtcrc3Mb8jt31s0tCLPe6c57rQXEf7KR9oYrFdzE1ZsJCP6j+MX+A2+sj1Pj3aJtQ=="
-  "resolved" "https://registry.npmjs.org/@graphprotocol/graph-ts/-/graph-ts-0.22.0.tgz"
-  "version" "0.22.0"
+"@graphprotocol/graph-ts@^0.23.1":
+  "integrity" "sha512-pipofvN1LlwLOXrS7IWy8hSBFZzVyVHdLXDpQskl9nKqdbb3chelj4JoVEzCl7klvomDpP84ngLpW17fBh5vww=="
+  "resolved" "https://registry.npmjs.org/@graphprotocol/graph-ts/-/graph-ts-0.23.1.tgz"
+  "version" "0.23.1"
   dependencies:
     "assemblyscript" "0.19.10"
 
@@ -228,13 +221,14 @@
   dependencies:
     "safer-buffer" "~2.1.0"
 
-"assemblyscript@^0.19.16":
-  "integrity" "sha512-y/7IufNwjmIorfLPS2+hIG89cFpZMYCakO/dX2EG8qI2ucEA2VIfh786s5j15w7nJU+VwKgr6K80xjUZO3rvFA=="
-  "resolved" "https://registry.npmjs.org/assemblyscript/-/assemblyscript-0.19.18.tgz"
-  "version" "0.19.18"
+"assemblyscript@^0.19.20":
+  "integrity" "sha512-uull/pqWqKZkBC8pQM+oujNoRKC4bN+gv/cJ2Dl71fOzvCXqQN+q/36RpMzN4v5nryt8XoKwXQ8dbv4zGU1nbQ=="
+  "resolved" "https://registry.npmjs.org/assemblyscript/-/assemblyscript-0.19.20.tgz"
+  "version" "0.19.20"
   dependencies:
-    "binaryen" "101.0.0-nightly.20210904"
-    "long" "^4.0.0"
+    "binaryen" "102.0.0-nightly.20211028"
+    "long" "^5.1.0"
+    "source-map-support" "^0.5.20"
 
 "assemblyscript@0.19.10":
   "integrity" "sha512-HavcUBXB3mBTRGJcpvaQjmnmaqKHBGREjSPNsIvnAk2f9dj78y4BkMaSSdvBQYWcDDzsHQjyUC8stICFkD1Odg=="
@@ -331,10 +325,10 @@
   "resolved" "https://registry.npmjs.org/binaryen/-/binaryen-101.0.0-nightly.20210723.tgz"
   "version" "101.0.0-nightly.20210723"
 
-"binaryen@101.0.0-nightly.20210904":
-  "integrity" "sha512-2AvJhErttuoMvgNcYPPpPy7C12PSvDdtZWtEeX/Otm/Vtf4ePvBpT3UIA00hGAh8HNaGr+dzFNstxTUvjNwZTg=="
-  "resolved" "https://registry.npmjs.org/binaryen/-/binaryen-101.0.0-nightly.20210904.tgz"
-  "version" "101.0.0-nightly.20210904"
+"binaryen@102.0.0-nightly.20211028":
+  "integrity" "sha512-GCJBVB5exbxzzvyt8MGDv/MeUjs6gkXDvf4xOIItRBptYl0Tz5sm1o/uG95YK0L0VeG5ajDu3hRtkBP2kzqC5w=="
+  "resolved" "https://registry.npmjs.org/binaryen/-/binaryen-102.0.0-nightly.20211028.tgz"
+  "version" "102.0.0-nightly.20211028"
 
 "bindings@^1.5.0":
   "integrity" "sha512-p2q/t/mhvuOj/UeLlV6566GD/guowlr0hHxClI0W9m7MWYkL1F0hLo+0Aexs9HSPCtR1SXQ0TD3MMKrXZajbiQ=="
@@ -688,11 +682,14 @@
     "typedarray" "^0.0.6"
 
 "concat-stream@github:hugomrdias/concat-stream#feat/smaller":
-  "resolved" "git+ssh://git@github.com/hugomrdias/concat-stream.git#057bc7b5d6d8df26c8cf00a3f151b6721a0a8034"
+  "integrity" "sha512-exngKFi6K0zusByLCN17UWyYMUF6ytqADVGYpaaN6X2Kj44H9MlPAIA0GZIbHpRADnlApvq3YNVNqbIYU3l3Pw=="
+  "resolved" "git+ssh://git@github.com/hugomrdias/concat-stream.git"
   "version" "2.0.0"
   dependencies:
+    "buffer-from" "^1.0.0"
     "inherits" "^2.0.3"
     "readable-stream" "^3.0.2"
+    "typedarray" "^0.0.6"
 
 "console-control-strings@^1.0.0", "console-control-strings@~1.1.0":
   "integrity" "sha1-PXz0Rk22RG6mRL9LOVB/mFEAjo4="
@@ -1885,6 +1882,11 @@
   "resolved" "https://registry.npmjs.org/long/-/long-4.0.0.tgz"
   "version" "4.0.0"
 
+"long@^5.1.0":
+  "integrity" "sha512-eNc10JP6ezXp/qxXZlKS4OHAKNae3je9LUkjmXPDEa+Iidlz0n4nFi/9LT+GOgcayMWhykLoISN+v0THeOiWQQ=="
+  "resolved" "https://registry.npmjs.org/long/-/long-5.1.0.tgz"
+  "version" "5.1.0"
+
 "looper@^3.0.0":
   "integrity" "sha1-LvpUw7HLq6m5Su4uWRSwvlf7t0k="
   "resolved" "https://registry.npmjs.org/looper/-/looper-3.0.0.tgz"
@@ -1918,13 +1920,13 @@
   dependencies:
     "multiaddr" "^7.3.0"
 
-"matchstick-as@git://github.com/LimeChain/matchstick-as.git#b9d6988a07923b8286d8c38ef25581368570bc2a":
-  "integrity" "sha512-66CjYV8h2n2k2XLXPpwVCofmlo/2EjEQ5KFIIKzwTgKBNvCLJEt6457OWVd/Oups+XdbBefF/GqMawUzUxcrbA=="
-  "resolved" "git+ssh://git@github.com/LimeChain/matchstick-as.git#b9d6988a07923b8286d8c38ef25581368570bc2a"
+"matchstick-as@git://github.com/LimeChain/matchstick-as.git#c2d83fd1f661cd5a773ef0b98d8c8a5d86c68a8e":
+  "integrity" "sha512-2NqxZuS5LyJsU5zd97XW49fnuQYWhpxJVRpnKgNRz4TXt/mwbvWCl4iLDY1zSB1NadrK13RdTm/joCyfB1/c2w=="
+  "resolved" "git+ssh://git@github.com/LimeChain/matchstick-as.git#c2d83fd1f661cd5a773ef0b98d8c8a5d86c68a8e"
   "version" "0.2.0"
   dependencies:
-    "@graphprotocol/graph-ts" "0.22.0"
-    "assemblyscript" "^0.19.16"
+    "@graphprotocol/graph-ts" "^0.23.1"
+    "assemblyscript" "^0.19.20"
 
 "md5.js@^1.3.4":
   "integrity" "sha512-xitP+WxNPcTTOgnTJcrhM0xvdPepipPSf3I8EIpGKeFLjt3PlJLIDG3u8EX53ZIubkb+5U2+3rELYpEhHhzdkg=="
@@ -2194,13 +2196,14 @@
   "version" "1.0.2"
 
 "ndjson@github:hugomrdias/ndjson#feat/readable-stream3":
-  "resolved" "git+ssh://git@github.com/hugomrdias/ndjson.git#4db16da6b42e5b39bf300c3a7cde62abb3fa3a11"
+  "integrity" "sha512-M25mvKP1mFiDi+EKYlKF5pzctQBNhFHgAonwwJsKFIQFIZNg6Ug8knoW468D+TJYnR3MGaiJ1lkWpA4c5YCGag=="
+  "resolved" "git+ssh://git@github.com/hugomrdias/ndjson.git"
   "version" "1.5.0"
   dependencies:
     "json-stringify-safe" "^5.0.1"
     "minimist" "^1.2.0"
-    "split2" "^3.1.0"
-    "through2" "^3.0.0"
+    "split2" "^2.1.0"
+    "through2" "^2.0.3"
 
 "node-abi@^2.21.0":
   "integrity" "sha512-/2D0wOQPgaUWzVSVgRMx+trKJRC2UG4SUc4oCJoXx9Uxjtp0Vy3/kt7zcbxHF8+Z/pK3UloLWzBISg72brfy1w=="
@@ -2786,12 +2789,25 @@
     "once" "^1.3.1"
     "simple-concat" "^1.0.0"
 
+"source-map-support@^0.5.20":
+  "integrity" "sha512-uBHU3L3czsIyYXKX88fdrGovxdSCoTGDRZ6SYXtSRxLZUzHg5P/66Ht6uoUlHu9EZod+inXhKo3qQgwXUT/y1w=="
+  "resolved" "https://registry.npmjs.org/source-map-support/-/source-map-support-0.5.21.tgz"
+  "version" "0.5.21"
+  dependencies:
+    "buffer-from" "^1.0.0"
+    "source-map" "^0.6.0"
+
+"source-map@^0.6.0":
+  "integrity" "sha512-UjgapumWlbMhkBgzT7Ykc5YXUT46F0iKu8SGXq0bcwP5dz/h0Plj6enJqjz1Zbq2l5WaqYnrVbwWOWMyF3F47g=="
+  "resolved" "https://registry.npmjs.org/source-map/-/source-map-0.6.1.tgz"
+  "version" "0.6.1"
+
 "split-ca@^1.0.0":
   "integrity" "sha1-bIOv82kvphJW4M0ZfgXp3hV2kaY="
   "resolved" "https://registry.npmjs.org/split-ca/-/split-ca-1.0.1.tgz"
   "version" "1.0.1"
 
-"split2@^3.1.0":
+"split2@^2.1.0":
   "integrity" "sha512-9NThjpgZnifTkJpzTZ7Eue85S49QwpNhZTq6GRJwObb6jnLFNGB7Qm73V5HewTROPyxD0C29xqmaI68bQtV+hg=="
   "resolved" "https://registry.npmjs.org/split2/-/split2-3.2.2.tgz"
   "version" "3.2.2"
@@ -2973,7 +2989,7 @@
   "resolved" "https://registry.npmjs.org/through/-/through-2.3.8.tgz"
   "version" "2.3.8"
 
-"through2@^3.0.0", "through2@^3.0.1":
+"through2@^2.0.3", "through2@^3.0.1":
   "integrity" "sha512-enaDQ4MUyP2W6ZyT6EsMzqBPZaM/avg8iuo+l2d3QCs0J+6RaqkHV/2/lOwDTueBHeJ/2LG9lrLW3d5rWPucuQ=="
   "resolved" "https://registry.npmjs.org/through2/-/through2-3.0.2.tgz"
   "version" "3.0.2"

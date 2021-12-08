@@ -11,9 +11,9 @@
     "test": "graph test gravity"
   },
   "dependencies": {
-    "@graphprotocol/graph-cli": "^0.22.1",
-    "@graphprotocol/graph-ts": "^0.22.1",
-    "matchstick-as": "git://github.com/LimeChain/matchstick-as.git#b9d6988a07923b8286d8c38ef25581368570bc2a",
+    "@graphprotocol/graph-cli": "^0.23.1",
+    "@graphprotocol/graph-ts": "^0.23.1",
+    "matchstick-as": "git://github.com/LimeChain/matchstick-as.git#c2d83fd1f661cd5a773ef0b98d8c8a5d86c68a8e",
     "keytar": "^7.4.0"
   }
 }
