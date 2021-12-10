@@ -2,19 +2,20 @@
 
 ❗ This repository reflects the changes made in the latest version of [Matchstick](https://github.com/LimeChain/matchstick/) (a.k.a. it follows the main branch).
 
-## Help
+## Overview
 ```sh
-$ ./matchstick -h
-Matchstick 🔥 0.2.0
+Matchstick 🔥 0.2.1
 Limechain <https://limechain.tech>
 Unit testing framework for Subgraph development on The Graph protocol.
 
 USAGE:
-    matchstick [test_suites]...
+    graph test [test_suites]...
 
 FLAGS:
-    -h, --help       Prints help information
-    -V, --version    Prints version information
+    -h, --help                    Prints help information
+    -v, --version <tag>           Choose the version of the rust binary that you want to be downloaded/used
+    -f, --force                   Overwrite folder + file when downloading
+    -l, --logs                    Logs to the console information about the OS, CPU model and download url (debugging purposes)
 
 ARGS:
     <test_suites>...    Please specify the names of the test suites you would like to run.
@@ -24,7 +25,7 @@ ARGS:
 
 ### Directory structure
 
-For **Matchstick** to recognize your test suites, you need to put them in a `tests/` folder in the root of your project.
+For **Matchstick** to recognize your test suites, you need to put them in a `tests/` folder in the root of your project or use the `testsFolder` attribute in your subgraph.yaml to specify a different location/name.
 
 ***NOTE***: A *Test Suite* is simply a collection of `test(...)` function calls. They can be put into a single file or
 many files grouped into a directory.
@@ -193,7 +194,8 @@ export function createNewGravatarEvent(id: i32, ownerAddress: string, displayNam
 ```
 That's all well and good, but what if we had more complex logic in the handler function? We would want to check that the event that gets saved in the store looks the way we want it to look like.
 
-What we need to do is create a test file in the `tests/` subdirectory under the root folder. We can name it however we want as long as it ends with `.test.ts` - let's say `gravity.test.ts`. 
+What we need to do is create a test file in the `tests/` subdirectory under the root folder (or specify a different name/location by using the `testsFolder` attribute in the subgraph.yaml).
+We can name it however we want as long as it ends with `.test.ts` - let's say `gravity.test.ts`. 
 
 **Tip:** You can also group test files into directories, for example:
 ```bash
