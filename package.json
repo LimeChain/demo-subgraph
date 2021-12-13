@@ -14,6 +14,6 @@
   "dependencies": {
     "@graphprotocol/graph-cli": "^0.25.1",
     "@graphprotocol/graph-ts": "^0.24.1",
-    "matchstick-as": "^0.2.1"
+    "matchstick-as": "https://github.com/LimeChain/matchstick-as.git#add_wabt_as_dependency"
   }
 }
