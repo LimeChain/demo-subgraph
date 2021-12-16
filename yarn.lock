@@ -1813,10 +1813,10 @@
   dependencies:
     "multiaddr" "^7.3.0"
 
-"matchstick-as@^0.2.1":
-  "integrity" "sha512-lqP+IZDNMrZwU0PCd+xHbqkM8Tpd7j5vaM42A53g9Cqr/cAM+fS0hTsGYklcsqH0gZ6EPBvstfpokBPGW2F2eg=="
-  "resolved" "https://registry.npmjs.org/matchstick-as/-/matchstick-as-0.2.1.tgz"
-  "version" "0.2.1"
+"matchstick-as@^0.2.2":
+  "integrity" "sha512-1zTwETBdpeUFqQzRAS74YOmwgL8uDFW+4Ti2VP3doujXfmYhSHLP+7s9T6vKcpcbVpMZGwmUXfYXAq8qPs/pog=="
+  "resolved" "https://registry.npmjs.org/matchstick-as/-/matchstick-as-0.2.2.tgz"
+  "version" "0.2.2"
   dependencies:
     "@graphprotocol/graph-ts" "^0.24.1"
     "assemblyscript" "^0.19.20"
