@@ -16,7 +16,7 @@ dataSources:
       language: wasm/assemblyscript
       entities:
         - Gravatar
-        - Avatar
+        - Transaction
       abis:
         - name: Gravity
           file: ./abis/Gravity.json
