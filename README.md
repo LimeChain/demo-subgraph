@@ -2,19 +2,20 @@
 
 ❗ This repository reflects the changes made in the latest version of [Matchstick](https://github.com/LimeChain/matchstick/) (a.k.a. it follows the main branch).
 
-## Help
+## Overview
 ```sh
-$ ./matchstick -h
-Matchstick 🔥 0.2.0
+Matchstick 🔥 0.2.1
 Limechain <https://limechain.tech>
 Unit testing framework for Subgraph development on The Graph protocol.
 
 USAGE:
-    matchstick [test_suites]...
+    graph test [test_suites]...
 
 FLAGS:
-    -h, --help       Prints help information
-    -V, --version    Prints version information
+    -h, --help                    Prints help information
+    -v, --version <tag>           Choose the version of the rust binary that you want to be downloaded/used
+    -f, --force                   Overwrite folder + file when downloading
+    -l, --logs                    Logs to the console information about the OS, CPU model and download url (debugging purposes)
 
 ARGS:
     <test_suites>...    Please specify the names of the test suites you would like to run.
@@ -24,7 +25,7 @@ ARGS:
 
 ### Directory structure
 
-For **Matchstick** to recognize your test suites, you need to put them in a `tests/` folder in the root of your project.
+For **Matchstick** to recognize your test suites, you need to put them in a `tests/` folder in the root of your project or use the `testsFolder` attribute in your subgraph.yaml to specify a different location/name.
 
 ***NOTE***: A *Test Suite* is simply a collection of `test(...)` function calls. They can be put into a single file or
 many files grouped into a directory.
@@ -193,7 +194,8 @@ export function createNewGravatarEvent(id: i32, ownerAddress: string, displayNam
 ```
 That's all well and good, but what if we had more complex logic in the handler function? We would want to check that the event that gets saved in the store looks the way we want it to look like.
 
-What we need to do is create a test file in the `tests/` subdirectory under the root folder. We can name it however we want as long as it ends with `.test.ts` - let's say `gravity.test.ts`. 
+What we need to do is create a test file in the `tests/` subdirectory under the root folder (or specify a different name/location by using the `testsFolder` attribute in the subgraph.yaml).
+We can name it however we want as long as it ends with `.test.ts` - let's say `gravity.test.ts`. 
 
 **Tip:** You can also group test files into directories, for example:
 ```bash
@@ -425,3 +427,84 @@ Logging critical errors will stop the execution of the tests and blow everything
 The log output includes the test run duration. Here's an example:
 
 `Jul 09 14:54:42.420 INFO Program execution time: 10.06022ms`
+
+## Test Coverage (Linux and MacOS)
+Using **Matchstick**, subgraph developers are able to run a script that will calculate the test coverage of the written unit tests. The tool only works on **Linux** and **MacOS**, but when we add support for Docker (see progress on that [here](https://github.com/LimeChain/matchstick/issues/222)) users should be able to use it on any machine and almost any OS. 
+
+The test coverage tool is really simple - it takes the compiled test `wasm` binaries and converts them to `wat` files, which can then be easily inspected to see whether or not the handlers defined in `subgraph.yaml` have actually been called. Since code coverage (and testing as whole) is in very early stages in AssemblyScript and WebAssembly, **Matchstick** cannot check for branch coverage. Instead we rely on the assertion that if a given handler has been called, the event/function for it have been properly mocked.
+
+### Prerequisites
+To run the test coverage functionality provided in **Matchstick**, there are a few things you need to prepare beforehand:
+
+#### 1. Install CMake
+The test coverage tool relies on [wabt](https://github.com/WebAssembly/wabt) under the hood, which in turn relies on [CMake](https://cmake.org/), so you'll need to install CMake locally before you run the coverage tool.
+
+#### 2. Export your handlers
+In order for **Matchstick** to check which handlers are being run, those handlers need to be exported from the **test file**. So for instance in our example, in our gravity.test.ts file we have the following handler being imported:
+```ts
+import  { handleNewGravatar } from "../../src/gravity";
+```
+In order for that function to be visible (for it to be included in the `wat` file **by name**) we need to also export it, like this:
+```ts
+export { handleNewGravatar };
+```
+
+### Usage
+Once that's all set up, to run the test coverage tool, simply run:
+```
+graph test -- -c
+```
+You could also add a custom `coverage` command to your `package.json` file, like so:
+```ts
+ "scripts": {
+    /.../
+    "coverage": "graph test -- -c"
+  },
+```
+
+Hopefully that should execute the coverage tool without any issues. You should see something like this in the terminal:
+```
+$ graph test -- -c
+Skipping download/install step because binary already exists at /Users/petko/work/demo-subgraph/node_modules/binary-install-raw/bin/0.2.0
+
+___  ___      _       _         _   _      _
+|  \/  |     | |     | |       | | (_)    | |
+| .  . | __ _| |_ ___| |__  ___| |_ _  ___| | __
+| |\/| |/ _` | __/ __| '_ \/ __| __| |/ __| |/ /
+| |  | | (_| | || (__| | | \__ \ |_| | (__|   <
+\_|  |_/\__,_|\__\___|_| |_|___/\__|_|\___|_|\_\
+
+If you want to change the default tests folder location (./tests/) you can add 'testsFolder: ./example/path' to the outermost level of your subgraph.yaml
+Compiling...
+
+Running in coverage report mode.
+ ️
+Downloading necessary tools... 🛠️
+Building. This might take a while... ⌛️
+Reading generated test modules... 🔎️
+Generating coverage report 📝
+
+Handlers for source 'cryptopunks':
+Handler 'handleAssign' is tested.
+Handler 'handlePunkTransfer' is not tested.
+Handler 'handlePunkOffered' is not tested.
+Handler 'handlePunkBidEntered' is not tested.
+Handler 'handlePunkBidWithdrawn' is not tested.
+Handler 'handlePunkBought' is not tested.
+Handler 'handlePunkNoLongerForSale' is not tested.
+Test coverage: 14% (1/7 handlers).
+
+Handlers for source 'WrappedPunks':
+Handler 'handleWrappedPunkTransfer' is not tested.
+Test coverage: 0% (0/1 handlers).
+
+Handlers for source 'Gravity':
+Handler 'handleNewGravatar' is tested.
+Handler 'handleUpdatedGravatar' is not tested.
+Handler 'handleCreateGravatar' is not tested.
+Test coverage: 33% (1/3 handlers).
+
+Global test coverage: 18% (2/11 handlers).
+
+✨  Done in 65.76s.
+```

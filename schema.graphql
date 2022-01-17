@@ -10,6 +10,7 @@ type Transaction @entity {
   displayName: String!
   imageUrl: String!
 }
+<<<<<<< HEAD
 
 enum TraitType {
   TYPE
@@ -1252,3 +1253,5 @@ type _Schema_
     algorithm: rank
     include: [{ entity: "Delegator", fields: [{ name: "defaultDisplayName" }, { name: "id" }] }]
   )
+=======
+>>>>>>> 9b03423c0af2d5af28ec019860c1901fe5724a71

@@ -1,10 +1,13 @@
 import { assert, createMockedFunction, clearStore, test, newMockEvent, newMockCall } from "matchstick-as/assembly/index"
 import { Address, BigInt, Bytes, ethereum, store, Value } from "@graphprotocol/graph-ts"
 
-import { createNewGravatarEvent } from "./utils"
+import { handleNewGravatars, createNewGravatarEvent, trySaveGravatarFromContract, saveGravatarFromContract } from "./utils"
 import { Gravatar } from "../../generated/schema"
 import { Gravity, NewGravatar, CreateGravatarCall } from "../../generated/Gravity/Gravity"
-import { handleNewGravatars, saveGravatarFromContract, trySaveGravatarFromContract, handleCreateGravatar } from "../../src/gravity"
+import { handleCreateGravatar, handleNewGravatar } from "../../src/gravity"
+
+// Coverage
+export { handleCreateGravatar, handleNewGravatar };
 
 let GRAVATAR_ENTITY_TYPE = "Gravatar"
 let TRANSACTION_ENTITY_TYPE = "Transaction"
@@ -66,14 +69,14 @@ test("Can call mappings with custom events", () => {
 
   // Call mappings
   let newGravatarEvent = createNewGravatarEvent(
-      12345,
+      0xdead,
       "0x89205A3A3b2A69De6Dbf7f01ED13B2108B2c43e7",
       "cap",
       "pac",
   )
 
   let anotherGravatarEvent = createNewGravatarEvent(
-      3546,
+      0xbeef,
       "0x89205A3A3b2A69De6Dbf7f01ED13B2108B2c43e7",
       "cap",
       "pac",
@@ -87,8 +90,8 @@ test("Can call mappings with custom events", () => {
       "id",
       "gravatarId0",
   )
-  assert.fieldEquals(GRAVATAR_ENTITY_TYPE, "12345", "id", "12345")
-  assert.fieldEquals(GRAVATAR_ENTITY_TYPE, "3546", "id", "3546")
+  assert.fieldEquals(GRAVATAR_ENTITY_TYPE, "0xdead", "id", "0xdead")
+  assert.fieldEquals(GRAVATAR_ENTITY_TYPE, "0xbeef", "id", "0xbeef")
   clearStore()
 })
 
