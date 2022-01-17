@@ -10,7 +10,6 @@ type Transaction @entity {
   displayName: String!
   imageUrl: String!
 }
-<<<<<<< HEAD
 
 enum TraitType {
   TYPE
@@ -538,28 +537,6 @@ type SubgraphDeployment @entity {
   "Amount of Subgraph entities that were currently using this deployment when they got deprecated"
   deprecatedSubgraphCount: Int!
 }
-
-# TODO - add when we have the ability to parse data sources
-# """Data source obtained from the subgraph manifest"""
-# type DataSource @entity {
-#   "Unique identifier of the data source. Such as contract address"
-#   id: ID!
-#   "Data source name in the manifest"
-#   name: String!
-#   "Networks that the subgraph deployment is indexing"
-#   networks: [String!]!
-#   "Contract"
-#   contract: Contract!
-#   "ABI of the contract"
-#   abi: String!
-# }
-
-# type Contract @entity {
-#   "Address of the contract"
-#   id: ID!
-#   "Contract name"
-#   name: String
-# }
 
 """
 Metadata for the Indexer along with parameters and staking data
@@ -1253,5 +1230,3 @@ type _Schema_
     algorithm: rank
     include: [{ entity: "Delegator", fields: [{ name: "defaultDisplayName" }, { name: "id" }] }]
   )
-=======
->>>>>>> 9b03423c0af2d5af28ec019860c1901fe5724a71
