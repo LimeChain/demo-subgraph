@@ -29,3 +29,33 @@ dataSources:
         - function: createGravatar(string,string)
           handler: handleCreateGravatar
       file: ./src/gravity.ts
+templates:
+  - kind: ethereum/contract
+    name: GraphTokenLockWallet
+    network: mainnet
+    source:
+      abi: GraphTokenLockWallet
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.6
+      language: wasm/assemblyscript
+      file: ./src/token-lock-wallet.ts
+      entities:
+        - TokenLockWallet
+      abis:
+        - name: GraphTokenLockWallet
+          file: ./abis/GraphTokenLockWallet.json
+      eventHandlers:
+        - event: TokensReleased(indexed address,uint256)
+          handler: handleTokensReleased
+        - event: TokensWithdrawn(indexed address,uint256)
+          handler: handleTokensWithdrawn
+        - event: TokensRevoked(indexed address,uint256)
+          handler: handleTokensRevoked
+        - event: ManagerUpdated(indexed address,indexed address)
+          handler: handleManagerUpdated
+        - event: ApproveTokenDestinations()
+          handler: handleApproveTokenDestinations
+        - event: RevokeTokenDestinations()
+          handler: handleRevokeTokenDestinations
+  

@@ -1,5 +1,6 @@
 # Matchstick binaries
 tests/.bin/
+matchstick
 
 # Test coverage tools
 tests/.tools/

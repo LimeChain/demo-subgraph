@@ -423,6 +423,30 @@ test("Blow everything up", () => {
 
 Logging critical errors will stop the execution of the tests and blow everything up. After all - we want to make sure you're code doesn't have critical logs in deployment, and you should notice right away if that were to happen.
 
+### Testing derived fields
+Testing derived fields is a newly added feature which (as the example below shows) allows the user to set a field in a certain entity and have another entity be updated automatically if it derives one of its fields from the first entity.
+Important thing to note is that the first entity needs to be reloaded as the automatic update happens in the store in rust of which the AS code is agnostic.
+```typescript
+test("Derived fields example test", () => {
+    let mainAccount = new GraphAccount("12")
+    mainAccount.save()
+    let operatedAccount = new GraphAccount("1")
+    operatedAccount.operators = ["12"]
+    operatedAccount.save()
+    let nst = new NameSignalTransaction("1234")
+    nst.signer = "12";
+    nst.save()
+
+    assert.assertNull(mainAccount.get("nameSignalTransactions"))
+    assert.assertNull(mainAccount.get("operatorOf"))
+
+    mainAccount = GraphAccount.load("12")!
+
+    assert.i32Equals(1, mainAccount.nameSignalTransactions.length)
+    assert.stringEquals("1", mainAccount.operatorOf[0])
+})
+```
+
 ### Test run time duration in the log output
 The log output includes the test run duration. Here's an example:
 
