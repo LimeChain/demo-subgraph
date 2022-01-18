@@ -10,6 +10,10 @@ test("Derived fields example test", () => {
     let nst = new NameSignalTransaction("1234")
     nst.signer = "12";
     nst.save()
+
+    assert.assertNull(mainAccount.get("nameSignalTransactions"))
+    assert.assertNull(mainAccount.get("operatorOf"))
+
     mainAccount = GraphAccount.load("12")!
 
     assert.i32Equals(1, mainAccount.nameSignalTransactions.length)
