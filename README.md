@@ -4,7 +4,7 @@
 
 ## Overview
 ```sh
-Matchstick 🔥 0.2.1
+Matchstick 🔥 0.3.0
 Limechain <https://limechain.tech>
 Unit testing framework for Subgraph development on The Graph protocol.
 
@@ -539,7 +539,7 @@ You could also add a custom `coverage` command to your `package.json` file, like
 Hopefully that should execute the coverage tool without any issues. You should see something like this in the terminal:
 ```
 $ graph test -- -c
-Skipping download/install step because binary already exists at /Users/petko/work/demo-subgraph/node_modules/binary-install-raw/bin/0.2.0
+Skipping download/install step because binary already exists at /Users/petko/work/demo-subgraph/node_modules/binary-install-raw/bin/0.3.0
 
 ___  ___      _       _         _   _      _
 |  \/  |     | |     | |       | | (_)    | |
