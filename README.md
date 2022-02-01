@@ -4,7 +4,7 @@
 
 ## Overview
 ```sh
-Matchstick 🔥 0.2.1
+Matchstick 🔥 0.3.0
 Limechain <https://limechain.tech>
 Unit testing framework for Subgraph development on The Graph protocol.
 
@@ -424,7 +424,7 @@ test("Blow everything up", () => {
 Logging critical errors will stop the execution of the tests and blow everything up. After all - we want to make sure you're code doesn't have critical logs in deployment, and you should notice right away if that were to happen.
 
 ### Testing derived fields
-Testing derived fields is a newly added feature which (as the example below shows) allows the user to set a field in a certain entity and have another entity be updated automatically if it derives one of its fields from the first entity.
+Testing derived fields is a feature which (as the example below shows) allows the user to set a field in a certain entity and have another entity be updated automatically if it derives one of its fields from the first entity.
 Important thing to note is that the first entity needs to be reloaded as the automatic update happens in the store in rust of which the AS code is agnostic.
 ```typescript
 test("Derived fields example test", () => {
@@ -446,6 +446,56 @@ test("Derived fields example test", () => {
     assert.stringEquals("1", mainAccount.operatorOf[0])
 })
 ```
+
+### Testing dynamic data sources
+Testing dynamic data sources can be be done by mocking the return value of the `context()`, `address()` and `network()` functions of the `dataSource` namespace.
+These functions currently return the following: context - returns an empty entity (DataSourceContext), address - returns "0x0000000000000000000000000000000000000000", network - returns "mainnet".
+The `create(...)` and `createWithContext(...)` functions are mocked to do nothing so they don't need to be called in the tests at all.
+Changes to the return values can be done through the functions of the `dataSourceMock` namespace in matchstick-as (version 0.3.0+). Example below:
+First we have the following event handler (which has been intentionally repurposed to showcase datasource mocking):
+```typescript
+export function handleApproveTokenDestinations(event: ApproveTokenDestinations): void {
+  let tokenLockWallet = TokenLockWallet.load(dataSource.address().toString())!
+  if (dataSource.network() == "rinkeby") {
+    tokenLockWallet.tokenDestinationsApproved = true
+  }
+  let context = dataSource.context()
+  if (context.get("contextVal")!.toI32() > 0) {
+    tokenLockWallet.setBigInt("tokensReleased", BigInt.fromI32(context.get("contextVal")!.toI32()))
+  }
+  tokenLockWallet.save()
+}
+```
+And then we have the test using one of the methods in the `dataSourceMock` namespace to set a new return value for all of the `dataSource` functions:
+```typescript
+import { assert, test, newMockEvent, dataSourceMock } from "matchstick-as/assembly/index"
+import { BigInt, DataSourceContext, Value } from "@graphprotocol/graph-ts"
+
+import { handleApproveTokenDestinations } from "../../src/token-lock-wallet"
+import { ApproveTokenDestinations } from "../../generated/templates/GraphTokenLockWallet/GraphTokenLockWallet"
+import { TokenLockWallet } from "../../generated/schema"
+
+test("Data source simple mocking example", () => {
+    let addressString = "0xA16081F360e3847006dB660bae1c6d1b2e17eC2A"
+    let wallet = new TokenLockWallet(addressString)
+    wallet.save()
+    let context = new DataSourceContext()
+    context.set("contextVal", Value.fromI32(325))
+    dataSourceMock.setReturnValues(addressString, "rinkeby", context)
+    let event = changetype<ApproveTokenDestinations>(newMockEvent())
+
+    assert.assertTrue(!wallet.tokenDestinationsApproved)
+    
+    handleApproveTokenDestinations(event)
+
+    wallet = TokenLockWallet.load(addressString)!
+    assert.assertTrue(wallet.tokenDestinationsApproved)
+    assert.bigIntEquals(wallet.tokensReleased, BigInt.fromI32(325))
+
+    dataSourceMock.resetValues()
+})
+```
+Notice that `dataSourceMock.resetValues()` is called at the end. That's because the values are remembered when they are changed and need to be reset if you want to go back to the default values.
 
 ### Test run time duration in the log output
 The log output includes the test run duration. Here's an example:
@@ -489,7 +539,7 @@ You could also add a custom `coverage` command to your `package.json` file, like
 Hopefully that should execute the coverage tool without any issues. You should see something like this in the terminal:
 ```
 $ graph test -- -c
-Skipping download/install step because binary already exists at /Users/petko/work/demo-subgraph/node_modules/binary-install-raw/bin/0.2.0
+Skipping download/install step because binary already exists at /Users/petko/work/demo-subgraph/node_modules/binary-install-raw/bin/0.3.0
 
 ___  ___      _       _         _   _      _
 |  \/  |     | |     | |       | | (_)    | |

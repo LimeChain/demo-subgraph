@@ -1,4 +1,4 @@
-import { BigInt, log } from '@graphprotocol/graph-ts'
+import { BigInt, dataSource } from '@graphprotocol/graph-ts'
 import {
   TokensReleased,
   TokensWithdrawn,
@@ -36,8 +36,14 @@ export function handleManagerUpdated(event: ManagerUpdated): void {
 }
 
 export function handleApproveTokenDestinations(event: ApproveTokenDestinations): void {
-  let tokenLockWallet = TokenLockWallet.load(event.address.toHexString())!
-  tokenLockWallet.tokenDestinationsApproved = true
+  let tokenLockWallet = TokenLockWallet.load(dataSource.address().toString())!
+  if (dataSource.network() == "rinkeby") {
+    tokenLockWallet.tokenDestinationsApproved = true
+  }
+  let context = dataSource.context()
+  if (context.get("contextVal")!.toI32() > 0) {
+    tokenLockWallet.setBigInt("tokensReleased", BigInt.fromI32(context.get("contextVal")!.toI32()))
+  }
   tokenLockWallet.save()
 }
 

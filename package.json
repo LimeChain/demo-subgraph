@@ -12,8 +12,8 @@
     "coverage": "graph test -- -c"
   },
   "dependencies": {
-    "@graphprotocol/graph-cli": "^0.25.1",
+    "@graphprotocol/graph-cli": "^0.26.0",
     "@graphprotocol/graph-ts": "^0.24.1",
-    "matchstick-as": "^0.2.2"
+    "matchstick-as": "^0.3.0"
   }
 }
