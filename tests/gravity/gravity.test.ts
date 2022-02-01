@@ -24,7 +24,6 @@ test("Can mock and call function with different argument types", () => {
     .withArgs(argsArray)
     .returns([ethereum.Value.fromString("result")])
   let val = ethereum.call(new ethereum.SmartContractCall("conName", Address.fromString("0x90cBa2Bbb19ecc291A12066Fd8329D65FA1f1947"), "funcName", "funcName():(void)", argsArray))![0]
-
   assert.equals(ethereum.Value.fromString("result"), val)
 })
 

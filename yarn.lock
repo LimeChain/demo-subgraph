@@ -650,6 +650,7 @@
     "typedarray" "^0.0.6"
 
 "concat-stream@github:hugomrdias/concat-stream#feat/smaller":
+  "integrity" "sha512-MWufYdFw53ccGjCA+Ol7XJYpAlW6/prSMzuPOTRnJGcGzuhLn4Scrz7qf6o8bROZ514ltazcIFJZevcfbo0x7A=="
   "version" "2.0.0"
   dependencies:
     "buffer-from" "^1.0.0"
@@ -1815,9 +1816,9 @@
   dependencies:
     "multiaddr" "^7.3.0"
 
-"matchstick-as@^0.2.2":
-  "integrity" "sha512-Eg/GFoIGSVj4pNJZJwV7azDOIoiADkOyM3VChQlaEbS0NmjsOnREcNT0za0Qyh2RgFbMH/JBPVo+vbHvm2+thg=="
-  "resolved" "https://registry.npmjs.org/matchstick-as/-/matchstick-as-0.2.3.tgz"
+"matchstick-as@git://github.com/LimeChain/matchstick-as.git#24b813519cc9b3b472b59dabbf729177d139cb37":
+  "integrity" "sha512-w/A65kD4xjgPsWWr6YSwO/Yt2XPuSf3Gtu7oD9bJBXju4nP2C0ogeaU3C/S9+XaUtVjskoqSnpFBoFutXSNe+g=="
+  "resolved" "git+ssh://git@github.com/LimeChain/matchstick-as.git#24b813519cc9b3b472b59dabbf729177d139cb37"
   "version" "0.2.3"
   dependencies:
     "@graphprotocol/graph-ts" "^0.24.1"
@@ -2062,6 +2063,7 @@
   "version" "2.15.0"
 
 "ndjson@github:hugomrdias/ndjson#feat/readable-stream3":
+  "integrity" "sha1-rmA7NrE0vOw0e0UkIrC/mNWDLsg="
   "version" "1.5.0"
   dependencies:
     "json-stringify-safe" "^5.0.1"
