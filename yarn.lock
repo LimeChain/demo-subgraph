@@ -1824,10 +1824,10 @@
   dependencies:
     "multiaddr" "^7.3.0"
 
-"matchstick-as@^0.3.0":
-  "integrity" "sha512-+nxHlchVHzvcJzcNc8WxCV5FpADVqVJwEBuaq3IvZjp29xVoe/RWpodmTvQw+Pk6bRMAPI5grdmTPjR4hGgrcw=="
-  "resolved" "https://registry.npmjs.org/matchstick-as/-/matchstick-as-0.3.0.tgz"
-  "version" "0.3.0"
+"matchstick-as@^0.4.0":
+  "integrity" "sha512-XkWoXQWUg1ms8DaDMkl2M95woGPB89f7aysjwDNst/x+G9FV48dxcAKSwilJ1BVGV3MqU7HfuKGHxegSsuxQxQ=="
+  "resolved" "https://registry.npmjs.org/matchstick-as/-/matchstick-as-0.4.0.tgz"
+  "version" "0.4.0"
   dependencies:
     "@graphprotocol/graph-ts" "^0.24.1"
     "assemblyscript" "^0.19.20"
