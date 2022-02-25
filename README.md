@@ -25,7 +25,7 @@ ARGS:
 
 ### Directory structure
 
-For **Matchstick** to recognize your test suites, you need to put them in a `tests/` folder in the root of your project. Or you can configure a custom folder via `matchstick.yaml` config.
+For **Matchstick** to recognize your test suites, you need to put them in a `tests/` folder in the root of your project, or you can configure a custom folder via `matchstick.yaml` config.
 
 ***NOTE***: A *Test Suite* is simply a collection of `test(...)` function calls. They can be put into a single file or
 many files grouped into a directory.
