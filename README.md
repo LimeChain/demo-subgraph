@@ -25,10 +25,17 @@ ARGS:
 
 ### Directory structure
 
-For **Matchstick** to recognize your test suites, you need to put them in a `tests/` folder in the root of your project or use the `testsFolder` attribute in your subgraph.yaml to specify a different location/name.
+For **Matchstick** to recognize your test suites, you need to put them in a `tests/` folder in the root of your project, or you can configure a custom folder via `matchstick.yaml` config.
 
 ***NOTE***: A *Test Suite* is simply a collection of `test(...)` function calls. They can be put into a single file or
 many files grouped into a directory.
+
+### Configuration ⚙️
+Matchstick can be configured to use a custom tests and libs folder via `matchstick.yaml` config file:
+
+- To change the default tests location (./tests), add `testsFolder: ./custom/path`
+
+- To change the default libs location (./node_modules), add `libsFolder: ./custom/path`
 
 ### Naming
 
@@ -177,7 +184,7 @@ export function handleNewGravatars(events: NewGravatar[]): void {
 }
 
 export function createNewGravatarEvent(id: i32, ownerAddress: string, displayName: string, imageUrl: string): NewGravatar {
-  let newGravatarEvent = changetype<NewGravatar>(newMockEvent()) 
+  let newGravatarEvent = changetype<NewGravatar>(newMockEvent())
   newGravatarEvent.parameters = new Array();
   let idParam = new ethereum.EventParam("id", ethereum.Value.fromI32(id));
   let addressParam = new ethereum.EventParam("ownderAddress", ethereum.Value.fromAddress(Address.fromString(ownerAddress)));
@@ -195,7 +202,7 @@ export function createNewGravatarEvent(id: i32, ownerAddress: string, displayNam
 That's all well and good, but what if we had more complex logic in the handler function? We would want to check that the event that gets saved in the store looks the way we want it to look like.
 
 What we need to do is create a test file in the `tests/` subdirectory under the root folder (or specify a different name/location by using the `testsFolder` attribute in the subgraph.yaml).
-We can name it however we want as long as it ends with `.test.ts` - let's say `gravity.test.ts`. 
+We can name it however we want as long as it ends with `.test.ts` - let's say `gravity.test.ts`.
 
 **Tip:** You can also group test files into directories, for example:
 ```bash
@@ -358,7 +365,7 @@ assert.stringEquals(DEFAULT_LOG_TYPE, newGravatarEvent.logType!);
 
 // Address
 assert.addressEquals(Address.fromString(DEFAULT_ADDRESS), newGravatarEvent.address);
- 
+
 // BigInt
 assert.bigIntEquals(BigInt.fromI32(DEFAULT_LOG_INDEX), newGravatarEvent.logIndex);
 
@@ -485,7 +492,7 @@ test("Data source simple mocking example", () => {
     let event = changetype<ApproveTokenDestinations>(newMockEvent())
 
     assert.assertTrue(!wallet.tokenDestinationsApproved)
-    
+
     handleApproveTokenDestinations(event)
 
     wallet = TokenLockWallet.load(addressString)!
@@ -503,7 +510,7 @@ The log output includes the test run duration. Here's an example:
 `Jul 09 14:54:42.420 INFO Program execution time: 10.06022ms`
 
 ## Test Coverage (Linux and MacOS)
-Using **Matchstick**, subgraph developers are able to run a script that will calculate the test coverage of the written unit tests. The tool only works on **Linux** and **MacOS**, but when we add support for Docker (see progress on that [here](https://github.com/LimeChain/matchstick/issues/222)) users should be able to use it on any machine and almost any OS. 
+Using **Matchstick**, subgraph developers are able to run a script that will calculate the test coverage of the written unit tests. The tool only works on **Linux** and **MacOS**, but when we add support for Docker (see progress on that [here](https://github.com/LimeChain/matchstick/issues/222)) users should be able to use it on any machine and almost any OS.
 
 The test coverage tool is really simple - it takes the compiled test `wasm` binaries and converts them to `wat` files, which can then be easily inspected to see whether or not the handlers defined in `subgraph.yaml` have actually been called. Since code coverage (and testing as whole) is in very early stages in AssemblyScript and WebAssembly, **Matchstick** cannot check for branch coverage. Instead we rely on the assertion that if a given handler has been called, the event/function for it have been properly mocked.
 
