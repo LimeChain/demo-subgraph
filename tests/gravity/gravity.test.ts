@@ -1,4 +1,4 @@
-import { assert, createMockedFunction, clearStore, test, newMockEvent, newMockCall } from "matchstick-as/assembly/index"
+import { assert, createMockedFunction, clearStore, test, newMockEvent, newMockCall, countEntities } from "matchstick-as/assembly/index"
 import { Address, BigInt, Bytes, ethereum, store, Value } from "@graphprotocol/graph-ts"
 
 import { handleNewGravatars, createNewGravatarEvent, trySaveGravatarFromContract, saveGravatarFromContract } from "./utils"
@@ -207,4 +207,18 @@ test("Can save transaction from call handler", () => {
 
   assert.fieldEquals(TRANSACTION_ENTITY_TYPE, "0xa16081f360e3847006db660bae1c6d1b2e17ec2a", "displayName", "name")
   assert.fieldEquals(TRANSACTION_ENTITY_TYPE, "0xa16081f360e3847006db660bae1c6d1b2e17ec2a", "imageUrl", "example.com")
+})
+
+test("Can assert amount of entities of a certain type in store", () => {
+  clearStore()
+  assert.entityCount(GRAVATAR_ENTITY_TYPE, 0)
+
+  let counter = 1
+  while (countEntities(GRAVATAR_ENTITY_TYPE) < 2) {
+    let newGravatar = new Gravatar("id" + counter.toString())
+    newGravatar.save()
+    counter++
+  }
+
+  assert.entityCount(GRAVATAR_ENTITY_TYPE, 2)
 })
