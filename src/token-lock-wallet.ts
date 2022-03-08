@@ -36,7 +36,7 @@ export function handleManagerUpdated(event: ManagerUpdated): void {
 }
 
 export function handleApproveTokenDestinations(event: ApproveTokenDestinations): void {
-  let tokenLockWallet = TokenLockWallet.load(dataSource.address().toString())!
+  let tokenLockWallet = TokenLockWallet.load(dataSource.address().toHexString())!
   if (dataSource.network() == "rinkeby") {
     tokenLockWallet.tokenDestinationsApproved = true
   }

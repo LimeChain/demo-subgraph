@@ -1,5 +1,5 @@
 import { assert, test, newMockEvent, dataSourceMock } from "matchstick-as/assembly/index"
-import { BigInt, DataSourceContext, Value } from "@graphprotocol/graph-ts"
+import { Address, BigInt, DataSourceContext, Value } from "@graphprotocol/graph-ts"
 
 import { handleApproveTokenDestinations } from "../../src/token-lock-wallet"
 import { ApproveTokenDestinations } from "../../generated/templates/GraphTokenLockWallet/GraphTokenLockWallet"
@@ -7,7 +7,9 @@ import { NameSignalTransaction, TokenLockWallet, GraphAccount } from "../../gene
 
 test("Data source simple mocking example", () => {
     let addressString = "0xA16081F360e3847006dB660bae1c6d1b2e17eC2A"
-    let wallet = new TokenLockWallet(addressString)
+    let address = Address.fromString(addressString)
+
+    let wallet = new TokenLockWallet(address.toHexString())
     wallet.save()
     let context = new DataSourceContext()
     context.set("contextVal", Value.fromI32(325))
@@ -15,10 +17,10 @@ test("Data source simple mocking example", () => {
     let event = changetype<ApproveTokenDestinations>(newMockEvent())
 
     assert.assertTrue(!wallet.tokenDestinationsApproved)
-    
+
     handleApproveTokenDestinations(event)
 
-    wallet = TokenLockWallet.load(addressString)!
+    wallet = TokenLockWallet.load(address.toHexString())!
     assert.assertTrue(wallet.tokenDestinationsApproved)
     assert.bigIntEquals(wallet.tokensReleased, BigInt.fromI32(325))
 
