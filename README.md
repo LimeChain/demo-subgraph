@@ -462,7 +462,7 @@ Changes to the return values can be done through the functions of the `dataSourc
 First we have the following event handler (which has been intentionally repurposed to showcase datasource mocking):
 ```typescript
 export function handleApproveTokenDestinations(event: ApproveTokenDestinations): void {
-  let tokenLockWallet = TokenLockWallet.load(dataSource.address().toString())!
+  let tokenLockWallet = TokenLockWallet.load(dataSource.address().toHexString())!
   if (dataSource.network() == "rinkeby") {
     tokenLockWallet.tokenDestinationsApproved = true
   }
@@ -484,7 +484,9 @@ import { TokenLockWallet } from "../../generated/schema"
 
 test("Data source simple mocking example", () => {
     let addressString = "0xA16081F360e3847006dB660bae1c6d1b2e17eC2A"
-    let wallet = new TokenLockWallet(addressString)
+    let address = Address.fromString(addressString)
+
+    let wallet = new TokenLockWallet(address.toHexString())
     wallet.save()
     let context = new DataSourceContext()
     context.set("contextVal", Value.fromI32(325))
@@ -495,7 +497,7 @@ test("Data source simple mocking example", () => {
 
     handleApproveTokenDestinations(event)
 
-    wallet = TokenLockWallet.load(addressString)!
+    wallet = TokenLockWallet.load(address.toHexString())!
     assert.assertTrue(wallet.tokenDestinationsApproved)
     assert.bigIntEquals(wallet.tokensReleased, BigInt.fromI32(325))
 
@@ -509,7 +511,8 @@ The log output includes the test run duration. Here's an example:
 
 `Jul 09 14:54:42.420 INFO Program execution time: 10.06022ms`
 
-## Test Coverage (Linux and MacOS)
+## Test Coverage
+
 Using **Matchstick**, subgraph developers are able to run a script that will calculate the test coverage of the written unit tests. The tool only works on **Linux** and **MacOS**, but when we add support for Docker (see progress on that [here](https://github.com/LimeChain/matchstick/issues/222)) users should be able to use it on any machine and almost any OS.
 
 The test coverage tool is really simple - it takes the compiled test `wasm` binaries and converts them to `wat` files, which can then be easily inspected to see whether or not the handlers defined in `subgraph.yaml` have actually been called. Since code coverage (and testing as whole) is in very early stages in AssemblyScript and WebAssembly, **Matchstick** cannot check for branch coverage. Instead we rely on the assertion that if a given handler has been called, the event/function for it have been properly mocked.
@@ -517,10 +520,7 @@ The test coverage tool is really simple - it takes the compiled test `wasm` bina
 ### Prerequisites
 To run the test coverage functionality provided in **Matchstick**, there are a few things you need to prepare beforehand:
 
-#### 1. Install CMake
-The test coverage tool relies on [wabt](https://github.com/WebAssembly/wabt) under the hood, which in turn relies on [CMake](https://cmake.org/), so you'll need to install CMake locally before you run the coverage tool.
-
-#### 2. Export your handlers
+#### Export your handlers
 In order for **Matchstick** to check which handlers are being run, those handlers need to be exported from the **test file**. So for instance in our example, in our gravity.test.ts file we have the following handler being imported:
 ```ts
 import  { handleNewGravatar } from "../../src/gravity";
