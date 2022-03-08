@@ -177,7 +177,7 @@ export function handleNewGravatars(events: NewGravatar[]): void {
 }
 
 export function createNewGravatarEvent(id: i32, ownerAddress: string, displayName: string, imageUrl: string): NewGravatar {
-  let newGravatarEvent = changetype<NewGravatar>(newMockEvent()) 
+  let newGravatarEvent = changetype<NewGravatar>(newMockEvent())
   newGravatarEvent.parameters = new Array();
   let idParam = new ethereum.EventParam("id", ethereum.Value.fromI32(id));
   let addressParam = new ethereum.EventParam("ownderAddress", ethereum.Value.fromAddress(Address.fromString(ownerAddress)));
@@ -195,7 +195,7 @@ export function createNewGravatarEvent(id: i32, ownerAddress: string, displayNam
 That's all well and good, but what if we had more complex logic in the handler function? We would want to check that the event that gets saved in the store looks the way we want it to look like.
 
 What we need to do is create a test file in the `tests/` subdirectory under the root folder (or specify a different name/location by using the `testsFolder` attribute in the subgraph.yaml).
-We can name it however we want as long as it ends with `.test.ts` - let's say `gravity.test.ts`. 
+We can name it however we want as long as it ends with `.test.ts` - let's say `gravity.test.ts`.
 
 **Tip:** You can also group test files into directories, for example:
 ```bash
@@ -358,7 +358,7 @@ assert.stringEquals(DEFAULT_LOG_TYPE, newGravatarEvent.logType!);
 
 // Address
 assert.addressEquals(Address.fromString(DEFAULT_ADDRESS), newGravatarEvent.address);
- 
+
 // BigInt
 assert.bigIntEquals(BigInt.fromI32(DEFAULT_LOG_INDEX), newGravatarEvent.logIndex);
 
@@ -455,7 +455,7 @@ Changes to the return values can be done through the functions of the `dataSourc
 First we have the following event handler (which has been intentionally repurposed to showcase datasource mocking):
 ```typescript
 export function handleApproveTokenDestinations(event: ApproveTokenDestinations): void {
-  let tokenLockWallet = TokenLockWallet.load(dataSource.address().toString())!
+  let tokenLockWallet = TokenLockWallet.load(dataSource.address().toHexString())!
   if (dataSource.network() == "rinkeby") {
     tokenLockWallet.tokenDestinationsApproved = true
   }
@@ -477,7 +477,9 @@ import { TokenLockWallet } from "../../generated/schema"
 
 test("Data source simple mocking example", () => {
     let addressString = "0xA16081F360e3847006dB660bae1c6d1b2e17eC2A"
-    let wallet = new TokenLockWallet(addressString)
+    let address = Address.fromString(addressString)
+
+    let wallet = new TokenLockWallet(address.toHexString())
     wallet.save()
     let context = new DataSourceContext()
     context.set("contextVal", Value.fromI32(325))
@@ -485,10 +487,10 @@ test("Data source simple mocking example", () => {
     let event = changetype<ApproveTokenDestinations>(newMockEvent())
 
     assert.assertTrue(!wallet.tokenDestinationsApproved)
-    
+
     handleApproveTokenDestinations(event)
 
-    wallet = TokenLockWallet.load(addressString)!
+    wallet = TokenLockWallet.load(address.toHexString())!
     assert.assertTrue(wallet.tokenDestinationsApproved)
     assert.bigIntEquals(wallet.tokensReleased, BigInt.fromI32(325))
 
@@ -502,18 +504,15 @@ The log output includes the test run duration. Here's an example:
 
 `Jul 09 14:54:42.420 INFO Program execution time: 10.06022ms`
 
-## Test Coverage (Linux and MacOS)
-Using **Matchstick**, subgraph developers are able to run a script that will calculate the test coverage of the written unit tests. The tool only works on **Linux** and **MacOS**, but when we add support for Docker (see progress on that [here](https://github.com/LimeChain/matchstick/issues/222)) users should be able to use it on any machine and almost any OS. 
+## Test Coverage
+Using **Matchstick**, subgraph developers are able to run a script that will calculate the test coverage of the written unit tests. The tool only works on **Linux** and **MacOS**, but when we add support for Docker (see progress on that [here](https://github.com/LimeChain/matchstick/issues/222)) users should be able to use it on any machine and almost any OS.
 
 The test coverage tool is really simple - it takes the compiled test `wasm` binaries and converts them to `wat` files, which can then be easily inspected to see whether or not the handlers defined in `subgraph.yaml` have actually been called. Since code coverage (and testing as whole) is in very early stages in AssemblyScript and WebAssembly, **Matchstick** cannot check for branch coverage. Instead we rely on the assertion that if a given handler has been called, the event/function for it have been properly mocked.
 
 ### Prerequisites
 To run the test coverage functionality provided in **Matchstick**, there are a few things you need to prepare beforehand:
 
-#### 1. Install CMake
-The test coverage tool relies on [wabt](https://github.com/WebAssembly/wabt) under the hood, which in turn relies on [CMake](https://cmake.org/), so you'll need to install CMake locally before you run the coverage tool.
-
-#### 2. Export your handlers
+#### Export your handlers
 In order for **Matchstick** to check which handlers are being run, those handlers need to be exported from the **test file**. So for instance in our example, in our gravity.test.ts file we have the following handler being imported:
 ```ts
 import  { handleNewGravatar } from "../../src/gravity";
