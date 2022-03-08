@@ -4,7 +4,7 @@
 
 ## Overview
 ```sh
-Matchstick 🔥 0.3.0
+Matchstick 🔥 0.4.0
 Limechain <https://limechain.tech>
 Unit testing framework for Subgraph development on The Graph protocol.
 
@@ -25,10 +25,17 @@ ARGS:
 
 ### Directory structure
 
-For **Matchstick** to recognize your test suites, you need to put them in a `tests/` folder in the root of your project or use the `testsFolder` attribute in your subgraph.yaml to specify a different location/name.
+For **Matchstick** to recognize your test suites, you need to put them in a `tests/` folder in the root of your project, or you can configure a custom folder via `matchstick.yaml` config.
 
 ***NOTE***: A *Test Suite* is simply a collection of `test(...)` function calls. They can be put into a single file or
 many files grouped into a directory.
+
+### Configuration ⚙️
+Matchstick can be configured to use a custom tests and libs folder via `matchstick.yaml` config file:
+
+- To change the default tests location (./tests), add `testsFolder: ./custom/path`
+
+- To change the default libs location (./node_modules), add `libsFolder: ./custom/path`
 
 ### Naming
 
@@ -505,6 +512,7 @@ The log output includes the test run duration. Here's an example:
 `Jul 09 14:54:42.420 INFO Program execution time: 10.06022ms`
 
 ## Test Coverage
+
 Using **Matchstick**, subgraph developers are able to run a script that will calculate the test coverage of the written unit tests. The tool only works on **Linux** and **MacOS**, but when we add support for Docker (see progress on that [here](https://github.com/LimeChain/matchstick/issues/222)) users should be able to use it on any machine and almost any OS.
 
 The test coverage tool is really simple - it takes the compiled test `wasm` binaries and converts them to `wat` files, which can then be easily inspected to see whether or not the handlers defined in `subgraph.yaml` have actually been called. Since code coverage (and testing as whole) is in very early stages in AssemblyScript and WebAssembly, **Matchstick** cannot check for branch coverage. Instead we rely on the assertion that if a given handler has been called, the event/function for it have been properly mocked.
@@ -538,7 +546,7 @@ You could also add a custom `coverage` command to your `package.json` file, like
 Hopefully that should execute the coverage tool without any issues. You should see something like this in the terminal:
 ```
 $ graph test -- -c
-Skipping download/install step because binary already exists at /Users/petko/work/demo-subgraph/node_modules/binary-install-raw/bin/0.3.0
+Skipping download/install step because binary already exists at /Users/petko/work/demo-subgraph/node_modules/binary-install-raw/bin/0.4.0
 
 ___  ___      _       _         _   _      _
 |  \/  |     | |     | |       | | (_)    | |
