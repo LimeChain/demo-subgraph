@@ -1,13 +1,14 @@
-import { assert, createMockedFunction, clearStore, test, newMockEvent, newMockCall, countEntities } from "matchstick-as/assembly/index"
-import { Address, BigInt, Bytes, ethereum, store, Value } from "@graphprotocol/graph-ts"
+import { assert, createMockedFunction, clearStore, test, newMockEvent, newMockCall, countEntities, mockIpfsFile } from "matchstick-as/assembly/index"
+import { Address, BigInt, Bytes, ethereum, store, Value, ipfs } from "@graphprotocol/graph-ts"
 
-import { handleNewGravatars, createNewGravatarEvent, trySaveGravatarFromContract, saveGravatarFromContract } from "./utils"
+import { handleNewGravatars, createNewGravatarEvent, trySaveGravatarFromContract, saveGravatarFromContract, gravatarFromIpfs } from "./utils"
 import { Gravatar } from "../../generated/schema"
 import { Gravity, NewGravatar, CreateGravatarCall } from "../../generated/Gravity/Gravity"
 import { handleCreateGravatar, handleNewGravatar } from "../../src/gravity"
 
 // Coverage
-export { handleCreateGravatar, handleNewGravatar };
+export { handleCreateGravatar, handleNewGravatar}
+export { processGravatar } from "./utils"
 
 let GRAVATAR_ENTITY_TYPE = "Gravatar"
 let TRANSACTION_ENTITY_TYPE = "Transaction"
@@ -18,12 +19,15 @@ test("Can mock and call function with different argument types", () => {
   let arrayValue = ethereum.Value.fromI32Array([156666, 123412])
   let booleanValue = ethereum.Value.fromBoolean(true)
   let objectValue = ethereum.Value.fromAddress(Address.fromString("0x89205A3A3b2A69De6Dbf7f01ED13B2108B2c43e7"))
+  let tupleArray: Array<ethereum.Value> = [ethereum.Value.fromI32(152), ethereum.Value.fromString("string value")]
+  let tuple = changetype<ethereum.Tuple>(tupleArray)
+  let tupleValue = ethereum.Value.fromTuple(tuple)
 
-  let argsArray: Array<ethereum.Value> = [numValue, stringValue, arrayValue, booleanValue, objectValue]
-  createMockedFunction(Address.fromString("0x90cBa2Bbb19ecc291A12066Fd8329D65FA1f1947"), "funcName", "funcName():(void)")
+  let argsArray: Array<ethereum.Value> = [numValue, stringValue, arrayValue, booleanValue, objectValue, tupleValue]
+  createMockedFunction(Address.fromString("0x90cBa2Bbb19ecc291A12066Fd8329D65FA1f1947"), "funcName", "funcName(int32, string, int32[], bool, address, (int32, string)):(void)")
     .withArgs(argsArray)
     .returns([ethereum.Value.fromString("result")])
-  let val = ethereum.call(new ethereum.SmartContractCall("conName", Address.fromString("0x90cBa2Bbb19ecc291A12066Fd8329D65FA1f1947"), "funcName", "funcName():(void)", argsArray))![0]
+  let val = ethereum.call(new ethereum.SmartContractCall("conName", Address.fromString("0x90cBa2Bbb19ecc291A12066Fd8329D65FA1f1947"), "funcName", "funcName(int32, string, int32[], bool, address, (int32, string)):(void)", argsArray))![0]
 
   assert.equals(ethereum.Value.fromString("result"), val)
 })
@@ -138,7 +142,7 @@ test("Can add, get, assert and remove from store", () => {
   )
 
   store.remove(GRAVATAR_ENTITY_TYPE, "23")
-  
+
   assert.notInStore(GRAVATAR_ENTITY_TYPE, "23")
   clearStore()
 })
@@ -221,4 +225,32 @@ test("Can assert amount of entities of a certain type in store", () => {
   }
 
   assert.entityCount(GRAVATAR_ENTITY_TYPE, 2)
+})
+
+test("ipfs.cat", () => {
+  clearStore()
+
+  mockIpfsFile("ipfsCatfileHash", "tests/ipfs/cat.json")
+
+  assert.entityCount(GRAVATAR_ENTITY_TYPE, 0)
+
+  gravatarFromIpfs()
+
+  assert.entityCount(GRAVATAR_ENTITY_TYPE, 1)
+  assert.fieldEquals(GRAVATAR_ENTITY_TYPE, "1", "imageUrl", "https://i.ytimg.com/vi/MELP46s8Cic/maxresdefault.jpg")
+
+  clearStore()
+})
+
+test("ipfs.map", () => {
+  mockIpfsFile("ipfsMapfileHash", "tests/ipfs/map.json")
+
+  assert.entityCount(GRAVATAR_ENTITY_TYPE, 0)
+
+  ipfs.map("ipfsMapfileHash", 'processGravatar', Value.fromString('Gravatar'), ['json'])
+
+  assert.entityCount(GRAVATAR_ENTITY_TYPE, 3)
+  assert.fieldEquals(GRAVATAR_ENTITY_TYPE, "1", "displayName", "Gravatar1")
+  assert.fieldEquals(GRAVATAR_ENTITY_TYPE, "2", "displayName", "Gravatar2")
+  assert.fieldEquals(GRAVATAR_ENTITY_TYPE, "3", "displayName", "Gravatar3")
 })
