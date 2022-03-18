@@ -333,7 +333,7 @@ createMockedFunction(contractAddress, "getGravatar", "getGravatar(address):(stri
 ```
 
 
-### Mocking IPFS
+### Mocking IPFS (not available in matchstick 0.4.0 or earlier versions)
 Users can mock IPFS files using `mockIpfsFile(hash, filePath)` function. The function accepts two arguments, the first one is the IPFS file hash/path and the second one is the path to a local file.
 
 NOTE: When testing `ipfs.map/ipfs.mapJSON`, you need to export the callback function (`export { processGravatar } from "./utils"`) like in the example bellow:
