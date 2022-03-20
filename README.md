@@ -332,6 +332,96 @@ createMockedFunction(contractAddress, "getGravatar", "getGravatar(address):(stri
     .reverts();
 ```
 
+
+### Mocking IPFS (not available in matchstick 0.4.0 or earlier versions)
+Users can mock IPFS files using `mockIpfsFile(hash, filePath)` function. The function accepts two arguments, the first one is the IPFS file hash/path and the second one is the path to a local file.
+
+NOTE: When testing `ipfs.map/ipfs.mapJSON`, you need to export the callback function (`export { processGravatar } from "./utils"`) like in the example bellow:
+
+tests/gravity/gravity.test.ts:
+```typescript
+import { assert, test, mockIpfsFile } from "matchstick-as/assembly/index"
+import { ipfs } from "@graphprotocol/graph-ts"
+import { gravatarFromIpfs } from "./utils"
+
+export { processGravatar } from "./utils"
+
+test("ipfs.cat", () => {
+  clearStore()
+
+  mockIpfsFile("ipfsCatfileHash", "tests/ipfs/cat.json")
+
+  assert.entityCount(GRAVATAR_ENTITY_TYPE, 0)
+
+  gravatarFromIpfs()
+
+  assert.entityCount(GRAVATAR_ENTITY_TYPE, 1)
+  assert.fieldEquals(GRAVATAR_ENTITY_TYPE, "1", "imageUrl", "https://i.ytimg.com/vi/MELP46s8Cic/maxresdefault.jpg")
+
+  clearStore()
+})
+
+test("ipfs.map", () => {
+  mockIpfsFile("ipfsMapfileHash", "tests/ipfs/map.json")
+
+  assert.entityCount(GRAVATAR_ENTITY_TYPE, 0)
+
+  ipfs.map("ipfsMapfileHash", 'processGravatar', Value.fromString('Gravatar'), ['json'])
+
+  assert.entityCount(GRAVATAR_ENTITY_TYPE, 3)
+  assert.fieldEquals(GRAVATAR_ENTITY_TYPE, "1", "displayName", "Gravatar1")
+  assert.fieldEquals(GRAVATAR_ENTITY_TYPE, "2", "displayName", "Gravatar2")
+  assert.fieldEquals(GRAVATAR_ENTITY_TYPE, "3", "displayName", "Gravatar3")
+})
+```
+
+tests/gravity/utils.ts:
+```typescript
+import { Address, ethereum, JSONValue, Value, ipfs, json, Bytes } from "@graphprotocol/graph-ts"
+import { Gravatar } from "../../generated/schema"
+
+...
+
+// ipfs.map callback
+export function processGravatar(value: JSONValue, userData: Value): void {
+  // See the JSONValue documentation for details on dealing
+  // with JSON values
+  let obj = value.toObject()
+  let id = obj.get('id')
+
+  if (!id) {
+    return
+  }
+
+  // Callbacks can also created entities
+  let gravatar = new Gravatar(id.toString())
+  gravatar.displayName = userData.toString() + id.toString()
+  gravatar.save()
+}
+
+// function that calls ipfs.cat
+export function gravatarFromIpfs(): void {
+  let rawData = ipfs.cat("ipfsCatfileHash")
+
+  if (!rawData) {
+    return
+  }
+
+  let jsonData = json.fromBytes(rawData as Bytes).toObject()
+
+  let id = jsonData.get('id')
+  let url = jsonData.get("imageUrl")
+
+  if (!id || !url) {
+    return
+  }
+
+  let gravatar = new Gravatar(id.toString())
+  gravatar.imageUrl = url.toString()
+  gravatar.save()
+}
+```
+
 ### Asserting the state of the store
 Users are able to assert the final (or midway) state of the store through asserting entities. In order to do this, the user has to supply an Entity type, the specific ID of an Entity, a name of a field on that Entity, and the expected value of the field. Here's a quick example:
 ```typescript

@@ -1,4 +1,4 @@
-import { Address, ethereum } from "@graphprotocol/graph-ts"
+import { Address, ethereum, JSONValue, Value, ipfs, json, Bytes } from "@graphprotocol/graph-ts"
 import { newMockEvent } from "matchstick-as/assembly/index"
 
 import { Gravatar } from "../../generated/schema"
@@ -49,4 +49,41 @@ export function createNewGravatarEvent(id: i32, ownerAddress: string, displayNam
     newGravatarEvent.parameters.push(imageUrlParam)
 
     return newGravatarEvent
+}
+
+export function processGravatar(value: JSONValue, userData: Value): void {
+  // See the JSONValue documentation for details on dealing
+  // with JSON values
+  let obj = value.toObject()
+  let id = obj.get('id')
+
+  if (!id) {
+    return
+  }
+
+  // Callbacks can also created entities
+  let gravatar = new Gravatar(id.toString())
+  gravatar.displayName = userData.toString() + id.toString()
+  gravatar.save()
+}
+
+export function gravatarFromIpfs(): void {
+  let rawData = ipfs.cat("ipfsCatfileHash")
+
+  if (!rawData) {
+    return
+  }
+
+  let jsonData = json.fromBytes(rawData as Bytes).toObject()
+
+  let id = jsonData.get('id')
+  let url = jsonData.get("imageUrl")
+
+  if (!id || !url) {
+    return
+  }
+
+  let gravatar = new Gravatar(id.toString())
+  gravatar.imageUrl = url.toString()
+  gravatar.save()
 }
