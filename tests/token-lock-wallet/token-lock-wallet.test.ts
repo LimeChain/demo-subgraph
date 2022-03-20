@@ -1,5 +1,5 @@
 import { assert, test, newMockEvent, dataSourceMock } from "matchstick-as/assembly/index"
-import { Address, BigInt, DataSourceContext, Value } from "@graphprotocol/graph-ts"
+import { Address, BigInt, DataSourceContext, store, Value } from "@graphprotocol/graph-ts"
 
 import { handleApproveTokenDestinations } from "../../src/token-lock-wallet"
 import { ApproveTokenDestinations } from "../../generated/templates/GraphTokenLockWallet/GraphTokenLockWallet"
@@ -36,12 +36,27 @@ test("Derived fields example test", () => {
     let nst = new NameSignalTransaction("1234")
     nst.signer = "12";
     nst.save()
+    let nst2 = new NameSignalTransaction("2")
+    nst2.signer = "12";
+    nst2.save()
 
     assert.assertNull(mainAccount.get("nameSignalTransactions"))
     assert.assertNull(mainAccount.get("operatorOf"))
 
     mainAccount = GraphAccount.load("12")!
 
-    assert.i32Equals(1, mainAccount.nameSignalTransactions.length)
+    assert.assertNotNull(mainAccount.get("nameSignalTransactions"))
+    assert.assertNotNull(mainAccount.get("operatorOf"))
+    assert.i32Equals(2, mainAccount.nameSignalTransactions.length)
     assert.stringEquals("1", mainAccount.operatorOf[0])
+
+    let newNst = new NameSignalTransaction("2345");
+    newNst.signer = "12"
+    newNst.save()
+    nst.signer = "11";
+    nst.save();
+    store.remove("NameSignalTransaction", "2")
+
+    mainAccount = GraphAccount.load("12")!
+    assert.i32Equals(1, mainAccount.nameSignalTransactions.length)
 })
