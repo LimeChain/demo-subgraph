@@ -44,7 +44,7 @@ test("Can mock gravity function correctly", () => {
   let expectedResult = Address.fromString("0x90cBa2Bbb19ecc291A12066Fd8329D65FA1f1947")
   let bigIntParam = BigInt.fromString("1234")
   createMockedFunction(contractAddress, "gravatarToOwner", "gravatarToOwner(uint256):(address)")
-    .withArgs([ethereum.Value.fromSignedBigInt(bigIntParam)])
+    .withArgs([ethereum.Value.fromUnsignedBigInt(bigIntParam)])
     .returns([ethereum.Value.fromAddress(Address.fromString("0x90cBa2Bbb19ecc291A12066Fd8329D65FA1f1947"))])
 
   let gravity = Gravity.bind(contractAddress)
