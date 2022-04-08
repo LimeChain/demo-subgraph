@@ -1,5 +1,5 @@
 # Matchstick binaries
-tests/.bin/
+tests/.*
 matchstick
 
 # Test coverage tools
