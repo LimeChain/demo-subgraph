@@ -1,6 +1,5 @@
-FROM ubuntu:20.04
+FROM --platform=linux/x86_64 ubuntu:20.04
 
-ARG BUILDPLATFORM=linux/x86_64
 ARG DEBIAN_FRONTEND=noninteractive
 
 ENV ARGS=""
