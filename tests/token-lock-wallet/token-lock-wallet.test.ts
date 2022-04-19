@@ -34,10 +34,10 @@ test("Derived fields example test", () => {
     operatedAccount.operators = ["12"]
     operatedAccount.save()
     let nst = new NameSignalTransaction("1234")
-    nst.signer = "12";
+    nst.signer = "12"
     nst.save()
     let nst2 = new NameSignalTransaction("2")
-    nst2.signer = "12";
+    nst2.signer = "12"
     nst2.save()
 
     assert.assertNull(mainAccount.get("nameSignalTransactions"))
@@ -53,8 +53,8 @@ test("Derived fields example test", () => {
     let newNst = new NameSignalTransaction("2345");
     newNst.signer = "12"
     newNst.save()
-    nst.signer = "11";
-    nst.save();
+    nst.signer = "11"
+    nst.save()
     store.remove("NameSignalTransaction", "2")
 
     mainAccount = GraphAccount.load("12")!
