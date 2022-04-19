@@ -4,7 +4,7 @@
 
 ## Overview
 ```sh
-Matchstick 🔥 0.4.0
+Matchstick 🔥 0.4.3
 Limechain <https://limechain.tech>
 Unit testing framework for Subgraph development on The Graph protocol.
 
@@ -543,6 +543,7 @@ test("Derived fields example test", () => {
     assert.stringEquals("1", mainAccount.operatorOf[0])
 })
 ```
+❗ The store is updated on **every** assertion or `entity.load()` function call. When this happens any derived data pointing to a non-existent entity will be deleted.
 
 ### Testing dynamic data sources
 Testing dynamic data sources can be be done by mocking the return value of the `context()`, `address()` and `network()` functions of the `dataSource` namespace.
