@@ -15,9 +15,7 @@ RUN curl -OL https://github.com/LimeChain/matchstick/releases/download/<MATCHSTI
 RUN mkdir matchstick
 WORKDIR /matchstick
 
-COPY ../ .
-
-RUN npm run codegen
-RUN npm run build
+# Commenting out for now as it seems there's no need to copy when using bind mount
+# COPY ./ .
 
 CMD ../binary-linux-20 ${ARGS}
