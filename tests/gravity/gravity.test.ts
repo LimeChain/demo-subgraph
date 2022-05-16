@@ -33,8 +33,8 @@ test("Can mock and call function with different argument types", () => {
 })
 
 test("Can test if mocked function reverts", () => {
-  createMockedFunction(Address.fromString("0x89205A3A3b2A69De6Dbf7f01ED13B2108B2c43e7"), "revert", "revert():(void)").reverts()
-  let val = ethereum.call(new ethereum.SmartContractCall("conName", Address.fromString("0x89205A3A3b2A69De6Dbf7f01ED13B2108B2c43e7"), "revert", "revert():(void)", []))
+  createMockedFunction(Address.fromString("0x89205A3A3b2A69De6Dbf7f01ED13B2108B2c43e7"), "revertedFunction", "revertedFunction():(void)").reverts()
+  let val = ethereum.call(new ethereum.SmartContractCall("conName", Address.fromString("0x89205A3A3b2A69De6Dbf7f01ED13B2108B2c43e7"), "revertedFunction", "revertedFunction():(void)", []))
 
   assert.assertNull(val)
 })
