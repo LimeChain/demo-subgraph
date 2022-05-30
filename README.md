@@ -52,13 +52,15 @@ Now, according to Matchstick, there exists a test suite named `gravity`.
 
 ---
 
+***❗ IMPORTANT The following applies for matchstick versions `<0.5.0`. From `>=0.5.0`, every single `.test.ts` file will be compiled as a separate test suite named `<folder_name>/<test_file_name>`, e.g: `gravity/new_gravatar` and `gravity/updated_gravatar`.***
+
 As mentioned, you can group related tests and other files into folders.
 For example:
 ```
 tests/
 └── gravity
-    ├── gravity.test.ts
-    └── utils.ts
+    ├── new_gravatar.test.ts
+    └── updated_gravatar.test.ts
 
 1 directory, 2 files
 ```
@@ -68,6 +70,384 @@ Now all files, under the `gravity` folder, ending with `.test.ts` are interprete
 ## Caveats
 
  - **Matchstick** is case-insensitive when it comes to test suite names. Meaning, *Gravity = gravity = gRaVitY*.
+
+## Tests structure (>=0.5.0)
+
+***❗ IMPORTANT: Requires matchstick-as >=0.5.0***
+
+### describe()
+
+`describe(name: String , () => {})` - Defines a test group.
+
+**_Notes:_**
+
+- _Describes are not mandatory. You can still use test() the old way, outside of the describe() blocks_
+
+Example:
+
+```typescript
+import { describe, test } from "matchstick-as/assembly/index"
+import { handleNewGravatar } from "../../src/gravity"
+
+describe("handleNewGravatar()", () => {
+  test("Should create a new Gravatar entity", () => {
+    ...
+  })
+})
+```
+
+Nested `describe()` example:
+
+```typescript
+import { describe, test } from "matchstick-as/assembly/index"
+import { handleUpdatedGravatar } from "../../src/gravity"
+
+describe("handleUpdatedGravatar()", () => {
+  describe("When entity exists", () => {
+    test("updates the entity", () => {
+      ...
+    })
+  })
+
+  describe("When entity does not exists", () => {
+    test("it creates a new entity", () => {
+      ...
+    })
+  })
+})
+```
+__________________________________________________________________
+
+### test()
+
+`test(name: String, () =>, should_fail: bool)` - Defines a test case. You can use test() inside of describe() blocks or independently.
+
+Example:
+
+```typescript
+import { describe, test } from "matchstick-as/assembly/index"
+import { handleNewGravatar } from "../../src/gravity"
+
+describe("handleNewGravatar()", () => {
+  test("Should create a new Entity", () => {
+    ...
+  })
+})
+```
+
+or
+
+```typescript
+test("handleNewGravatar() should create a new entity", () => {
+  ...
+})
+
+
+```
+__________________________________________________________________
+
+### beforeAll()
+
+Runs a code block before any of the tests in the file. If `beforeAll` is declared inside of a `describe` block, it runs at the beginning of that `describe` block.
+
+Examples:
+
+Code inside `beforeAll` will execute once before *all* tests in the file.
+
+```typescript
+import { describe, test, beforeAll } from "matchstick-as/assembly/index"
+import { handleUpdatedGravatar, handleNewGravatar } from "../../src/gravity"
+import { Gravatar } from "../../generated/schema"
+
+beforeAll(() => {
+  let gravatar = new Gravatar("0x0")
+  gravatar.displayName = “First Gravatar”
+  gravatar.save()
+  ...
+})
+
+describe("When the entity does not exist", () => {
+  test("it should create a new Gravatar with id 0x1", () => {
+    ...
+  })
+})
+
+describe("When entity already exists", () => {
+  test("it should update the Gravatar with id 0x0", () => {
+    ...
+  })
+})
+```
+
+Code inside `beforeAll` will execute once before all tests in the first describe block
+
+```typescript
+import { describe, test, beforeAll } from "matchstick-as/assembly/index"
+import { handleUpdatedGravatar, handleNewGravatar } from "../../src/gravity"
+import { Gravatar } from "../../generated/schema"
+
+describe("handleUpdatedGravatar()", () => {
+  beforeAll(() => {
+    let gravatar = new Gravatar("0x0")
+    gravatar.displayName = “First Gravatar”
+    gravatar.save()
+    ...
+  })
+
+  test("updates Gravatar with id 0x0", () => {
+    ...
+  })
+
+  test("creates new Gravatar with id 0x1", () => {
+    ...
+  })
+})
+```
+__________________________________________________________________
+
+### afterAll()
+
+Runs a code block after all of the tests in the file. If `afterAll` is declared inside of a `describe` block, it runs at the end of that `describe` block.
+
+Example:
+
+Code inside `afterAll` will execute once after *all* tests in the file.
+
+```typescript
+import { describe, test, afterAll } from "matchstick-as/assembly/index"
+import { handleUpdatedGravatar, handleNewGravatar } from "../../src/gravity"
+import { store } from "@graphprotocol/graph-ts"
+
+afterAll(() => {
+  store.remove("Gravatar", "0x0")
+  ...
+})
+
+describe("handleNewGravatar, () => {
+  test("creates Gravatar with id 0x0", () => {
+    ...
+  })
+})
+
+describe("handleUpdatedGravatar", () => {
+  test("updates Gravatar with id 0x0", () => {
+    ...
+  })
+})
+```
+
+Code inside `afterAll` will execute once after all tests in the first describe block
+
+```typescript
+import { describe, test, afterAll, clearStore } from "matchstick-as/assembly/index"
+import { handleUpdatedGravatar, handleNewGravatar } from "../../src/gravity"
+
+describe("handleNewGravatar", () => {
+	afterAll(() => {
+    store.remove("Gravatar", "0x1")
+    ...
+	})
+
+  test("It creates a new entity with Id 0x0", () => {
+    ...
+  })
+
+  test("It creates a new entity with Id 0x1", () => {
+    ...
+  })
+})
+
+describe("handleUpdatedGravatar", () => {
+  test("updates Gravatar with id 0x0", () => {
+    ...
+  }) 
+})
+```
+__________________________________________________________________
+
+### beforeEach()
+
+Runs a code block before every test. If `beforeEach` is declared inside of a `describe` block, it runs before each test in that `describe` block.
+
+Examples:
+Code inside `beforeEach` will execute before each tests.
+
+```typescript
+import { describe, test, beforeEach, clearStore } from "matchstick-as/assembly/index"
+import { handleNewGravatars } from "./utils"
+
+beforeEach(() => {
+  clearStore() // <-- clear the store before each test in the file
+})
+
+describe("handleNewGravatars, () => {
+  test("A test that requires a clean store", () => {
+    ...
+  })
+
+  test("Second that requires a clean store", () => {
+    ...
+  })
+})
+
+ ...
+```
+
+Code inside `beforeEach` will execute only before each test in the that describe
+
+```typescript
+import { describe, test, beforeEach } from "matchstick-as/assembly/index"
+import { handleUpdatedGravatar, handleNewGravatar } from "../../src/gravity"
+
+describe("handleUpdatedGravatars", () => {
+  beforeEach(() => {
+    let gravatar = new Gravatar("0x0")
+    gravatar.displayName = "First Gravatar"
+    gravatar.imageUrl = ""
+    gravatar.save()
+  })
+
+  test("Upates the displayName", () => {
+     assert.fieldEqual("Gravatar", "0x0", "displayNamd", "First Gravatar")
+
+    // code that should update the displayName to 1st Gravatar
+
+    assert.fieldEqual("Gravatar", "0x0", "displayName", "1st Gravatar")
+    store.remove("Gravatar", "0x0")
+  })
+
+  test("Updates the imageUrl", () => {
+    assert.fieldEqual("Gravatar", "0x0", "imageUrl", "")
+
+    // code that should changes the imageUrl to https://www.gravatar.com/avatar/0x0
+
+    assert.fieldEqual("Gravatar", "0x0", "imageUrl", "https://www.gravatar.com/avatar/0x0")
+    store.remove("Gravatar", "0x0")
+  })
+})
+
+
+```
+__________________________________________________________________
+
+### afterEach()
+
+Runs a code block after every test. If `afterEach` is declared inside of a `describe` block, it runs after each test in that `describe` block.
+
+Examples:
+
+Code inside `afterEach` will execute after every test.
+
+```typescript
+import { describe, test, beforeEach, afterEach } from "matchstick-as/assembly/index"
+import { handleUpdatedGravatar, handleNewGravatar } from "../../src/gravity"
+
+beforeEach(() => {
+  let gravatar = new Gravatar("0x0")
+  gravatar.displayName = “First Gravatar”
+  gravatar.save()
+})
+
+afterEach(() => {
+  store.remove("Gravatar", "0x0")
+})
+
+describe("handleNewGravatar", () => {
+  ...
+})
+
+describe("handleUpdatedGravatar", () => {
+  test("Upates the displayName", () => {
+     assert.fieldEqual("Gravatar", "0x0", "displayNamd", "First Gravatar")
+
+    // code that should update the displayName to 1st Gravatar
+
+    assert.fieldEqual("Gravatar", "0x0", "displayName", "1st Gravatar")
+  })
+
+  test("Updates the imageUrl", () => {
+    assert.fieldEqual("Gravatar", "0x0", "imageUrl", "")
+
+    // code that should changes the imageUrl to https://www.gravatar.com/avatar/0x0
+
+    assert.fieldEqual("Gravatar", "0x0", "imageUrl", "https://www.gravatar.com/avatar/0x0")
+  })
+})
+```
+
+Code inside `afterEach` will execute after each test in that describe
+
+```typescript
+import { describe, test, beforeEach, afterEach } from "matchstick-as/assembly/index"
+import { handleUpdatedGravatar, handleNewGravatar } from "../../src/gravity"
+
+describe("handleNewGravatar", () => {
+  ...
+})
+
+describe("handleUpdatedGravatar", () => {
+  beforeEach(() => {
+    let gravatar = new Gravatar("0x0")
+    gravatar.displayName = "First Gravatar"
+    gravatar.imageUrl = ""
+    gravatar.save()
+  })
+
+  afterEach(() => {
+    store.remove("Gravatar", "0x0")
+  })
+
+  test("Upates the displayName", () => {
+     assert.fieldEqual("Gravatar", "0x0", "displayNamd", "First Gravatar")
+
+    // code that should update the displayName to 1st Gravatar
+
+    assert.fieldEqual("Gravatar", "0x0", "displayName", "1st Gravatar")
+  })
+
+  test("Updates the imageUrl", () => {
+    assert.fieldEqual("Gravatar", "0x0", "imageUrl", "")
+
+    // code that should changes the imageUrl to https://www.gravatar.com/avatar/0x0
+
+    assert.fieldEqual("Gravatar", "0x0", "imageUrl", "https://www.gravatar.com/avatar/0x0")
+  })
+})
+```
+
+## Asserts
+
+```typescript
+fieldEquals(entityType: string, id: string, fieldName: string, expectedVal: string)
+
+equals(expected: ethereum.Value, actual: ethereum.Value)
+
+notInStore(entityType: string, id: string)
+
+addressEquals(address1: Address, address2: Address)
+
+bytesEquals(bytes1: Bytes, bytes2: Bytes)
+
+i32Equals(number1: i32, number2: i32)
+
+bigIntEquals(bigInt1: BigInt, bigInt2: BigInt)
+
+booleanEquals(bool1: boolean, bool2: boolean)
+
+stringEquals(string1: string, string2: string)
+
+arrayEquals(array1: Array<ethereum.Value>, array2: Array<ethereum.Value>)
+
+tupleEquals(tuple1: ethereum.Tuple, tuple2: ethereum.Tuple)
+
+assertTrue(value: boolean)
+
+assertNull<T>(value: T)
+
+assertNotNull<T>(value: T)
+
+entityCount(entityType: string, expectedCount: i32)
+```
 
 ## Example Usage 📖
 
@@ -203,15 +583,6 @@ That's all well and good, but what if we had more complex logic in the handler f
 
 What we need to do is create a test file in the `tests/` subdirectory under the root folder (or specify a different name/location by using the `testsFolder` attribute in the subgraph.yaml).
 We can name it however we want as long as it ends with `.test.ts` - let's say `gravity.test.ts`.
-
-**Tip:** You can also group test files into directories, for example:
-```bash
-tests/
-└── gravity
-    ├── foo.test.ts
-    └── bar.test.ts
-```
-Now, your test name would be `gravity` - the name of the directory.
 
 ```typescript
 import { clearStore, test, assert } from "matchstick-as/assembly/index";
