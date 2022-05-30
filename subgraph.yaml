@@ -1,4 +1,4 @@
-specVersion: 0.0.2
+specVersion: 0.0.4
 description: Demo Subgraph showcasing unit testing with Matchstick!
 repository: https://github.com/LimeChain/demo-subgraph
 schema:

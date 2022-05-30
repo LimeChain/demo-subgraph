@@ -10,13 +10,16 @@ test("Data source simple mocking example", () => {
     let address = Address.fromString(addressString)
 
     let wallet = new TokenLockWallet(address.toHexString())
+    // This value should be set, because it is a required field, 
+    //and from graph-cli 0.30.0 codegen does not generate default values for required fields anymore
+    wallet.tokenDestinationsApproved = false
     wallet.save()
     let context = new DataSourceContext()
     context.set("contextVal", Value.fromI32(325))
     dataSourceMock.setReturnValues(addressString, "rinkeby", context)
     let event = changetype<ApproveTokenDestinations>(newMockEvent())
 
-    assert.assertTrue(!wallet.tokenDestinationsApproved)
+    assert.assertNull(wallet.tokenDestinationsApproved)
 
     handleApproveTokenDestinations(event)
 
