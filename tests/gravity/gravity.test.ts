@@ -8,6 +8,7 @@ import { handleCreateGravatar, handleNewGravatar } from "../../src/gravity"
 
 // Coverage
 export { handleCreateGravatar, handleNewGravatar}
+// IPFS
 export { processGravatar } from "./utils"
 
 let GRAVATAR_ENTITY_TYPE = "Gravatar"
