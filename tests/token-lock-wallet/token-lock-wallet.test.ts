@@ -50,7 +50,7 @@ describe("dataSourceMock", () => {
     let event = changetype<ApproveTokenDestinations>(newMockEvent())
     let wallet = TokenLockWallet.load(address.toHexString())!
 
-    assert.assertNull(wallet.tokenDestinationsApproved)
+    assert.assertTrue(!wallet.tokenDestinationsApproved)
 
     handleApproveTokenDestinations(event)
 
