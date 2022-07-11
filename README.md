@@ -448,7 +448,7 @@ entityCount(entityType: string, expectedCount: i32)
 
 ## Example Usage 📖
 
-***NOTE:*** Since `graph-cli 0.26.1, 0.27.1, 0.28.2 and 0.29.1`, `graph codegen` will not generate default values for your entities' required fields, you will need to set all required fields manually. Matchstick will fail the test and print an error message if any required fields are not set.
+***NOTE:*** Since `graph-cli 0.26.1, 0.27.1, 0.28.2 and 0.29.1`, `graph codegen` will not generate default values the required fields on `.save()`, you will need to set all required fields manually. Matchstick will fail the test and print an error message if any required fields are not present.
 
 If you prefer learning through watching, check out the [video tutorials](https://www.youtube.com/watch?v=T-orbT4gRiA)!
 
@@ -1020,8 +1020,6 @@ describe("dataSourceMock", () => {
     let address = Address.fromString(addressString)
 
     let wallet = new TokenLockWallet(address.toHexString())
-    // The following values should be set, because they are required fields,
-    // and since graph-cli 0.30.0 codegen does not generate default values for required fields anymore
     wallet.manager = Address.zero()
     wallet.initHash = Address.zero() as Bytes
     wallet.beneficiary = Address.zero()
@@ -1038,7 +1036,6 @@ describe("dataSourceMock", () => {
     wallet.tokensRevoked = BigInt.fromI32(0)
     wallet.blockNumberCreated = BigInt.fromI32(0)
     wallet.txHash = Address.zero() as Bytes
-
     wallet.save()
 
     let context = new DataSourceContext()

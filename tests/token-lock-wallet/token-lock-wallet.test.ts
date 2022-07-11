@@ -13,7 +13,8 @@ describe("dataSourceMock", () => {
 
     let wallet = new TokenLockWallet(address.toHexString())
     // The following values should be set, because they are required fields,
-    // and since graph-cli 0.30.0 codegen does not generate default values for required fields anymore
+    // Since graph-cli 0.26.1, 0.27.1, 0.28.2 and 0.29.1, graph codegen will not generate
+    // default values for the required fields on .save()
     wallet.manager = Address.zero()
     wallet.initHash = Address.zero() as Bytes
     wallet.beneficiary = Address.zero()
