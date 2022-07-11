@@ -103,7 +103,7 @@ describe("Mock contract functions", () => {
 })
 
 describe("Mocked Events", () => {
-  afterAll(() => {
+  afterEach(() => {
     clearStore()
   })
 
@@ -128,7 +128,6 @@ describe("Mocked Events", () => {
     assert.entityCount(GRAVATAR_ENTITY_TYPE, 2)
     assert.fieldEquals(GRAVATAR_ENTITY_TYPE, "0xdead", "displayName", "Gravatar 0xdead")
     assert.fieldEquals(GRAVATAR_ENTITY_TYPE, "0xbeef", "displayName", "Gravatar 0xbeef")
-    clearStore()
   })
 
   test("Can initialise event with default metadata", () => {
