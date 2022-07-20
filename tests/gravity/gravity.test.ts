@@ -1,4 +1,4 @@
-import { assert, createMockedFunction, clearStore, test, newMockEvent, newMockCall, countEntities, mockIpfsFile, beforeAll, describe, afterEach, afterAll } from "matchstick-as/assembly/index"
+import { assert, createMockedFunction, clearStore, test, newMockEvent, newMockCall, countEntities, mockIpfsFile, beforeAll, describe, afterEach, afterAll, logStore } from "matchstick-as/assembly/index"
 import { Address, BigInt, Bytes, ethereum, store, Value, ipfs } from "@graphprotocol/graph-ts"
 
 import { handleNewGravatars, createNewGravatarEvent, trySaveGravatarFromContract, saveGravatarFromContract, gravatarFromIpfs } from "./utils"
@@ -64,6 +64,10 @@ describe("Mock contract functions", () => {
   })
 
   describe("Save Gravatar from contract call", () => {
+    afterEach(() => {
+      clearStore()
+    })
+
     test("Can save Gravatar from contract", () => {
       let contractAddress = Address.fromString("0x89205A3A3b2A69De6Dbf7f01ED13B2108B2c43e7")
 
@@ -84,11 +88,9 @@ describe("Mock contract functions", () => {
         .withArgs([ethereum.Value.fromAddress(contractAddress)])
         .reverts()
 
-      trySaveGravatarFromContract("48")
-
-      // Assert that the gravatar was not changed
-      assert.fieldEquals(GRAVATAR_ENTITY_TYPE, "48", "displayName", "Gravatar 48")
-      assert.fieldEquals(GRAVATAR_ENTITY_TYPE, "48", "imageUrl", "https://example.com/image48.png")
+      trySaveGravatarFromContract("49")
+      // Assert that the gravatar was not saved
+      assert.notInStore(GRAVATAR_ENTITY_TYPE, "49")
     })
   })
 
