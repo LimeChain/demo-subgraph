@@ -546,7 +546,7 @@ export class Gravatar extends Entity {
 }
 ```
 
-And finally, we have a handler function (**that we've written in our** `gravity.ts` **file**) that deals with the events. As well as two little helper functions - one for multiple events of the same type and another for creating a filled instance of ethereum.Event - `newMockEvent` (Although `changetype` is inherently unsafe, most events can be safely upcast to the desired ethereum.Event extending class as shown in the example below):
+And finally, we have a handler function (**that we've written in our** `gravity.ts` **file**) that deals with the events. As well as two little helper functions - one for multiple events of the same type and another for creating a filled instance of ethereum.Event - `newMockEvent` (Although `changetype` is inherently unsafe, most events can be safely downcast to the desired `ethereum.Event`-extending class as shown in the example below):
 ```typescript
 export function handleNewGravatar(event: NewGravatar): void {
   let gravatar = new Gravatar(event.params.id.toHex())
