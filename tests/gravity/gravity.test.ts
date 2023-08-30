@@ -1,4 +1,4 @@
-import { assert, createMockedFunction, clearStore, test, newMockEvent, newMockCall, countEntities, mockIpfsFile, beforeAll, describe, afterEach, afterAll, logStore } from "matchstick-as/assembly/index"
+import { assert, createMockedFunction, clearStore, test, newMockEvent, newMockCall, countEntities, mockIpfsFile, beforeAll, describe, afterEach, afterAll, mockInBlockStore, clearInBlockStore } from "../../../matchstick-as/assembly/index"
 import { Address, BigInt, Bytes, ethereum, store, Value, ipfs } from "@graphprotocol/graph-ts"
 
 import { handleNewGravatars, createNewGravatarEvent, trySaveGravatarFromContract, saveGravatarFromContract, gravatarFromIpfs } from "./utils"
@@ -181,10 +181,23 @@ describe("Entity Store", () => {
     gravatar2.displayName = "Gravatar 23"
     gravatar2.imageUrl = "https://example.com/23.png"
     gravatar2.save()
+
+    mockInBlockStore("Gravatar", "gravatarId0", gravatar);
   })
 
   afterAll(() => {
     clearStore()
+    clearInBlockStore()
+  })
+
+  test("Can use entity.loadInBlock() to retrieve entity from cache store in the current block", () => {
+    let retrievedGravatar = Gravatar.loadInBlock("gravatarId0")
+    assert.stringEquals("gravatarId0", retrievedGravatar!.get("id")!.toString())
+  })
+
+  test("Returns null when calling entity.loadInBlock() if an entity doesn't exist in the current block", () => {
+    let retrievedGravatar = Gravatar.loadInBlock("IDoNotExist")
+    assert.assertNull(retrievedGravatar)
   })
 
   test("Can use entity.load() to retrieve entity from store", () => {
