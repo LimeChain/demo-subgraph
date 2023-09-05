@@ -901,8 +901,8 @@ test("Blow everything up", () => {
 Logging critical errors will stop the execution of the tests and blow everything up. After all - we want to make sure you're code doesn't have critical logs in deployment, and you should notice right away if that were to happen.
 
 ### Testing derived fields
-Testing derived fields is a feature which (as the example below shows) allows the user to set a field in a certain entity and have another entity be updated automatically if it derives one of its fields from the first entity.
-Important thing to note is that the first entity needs to be reloaded as the automatic update happens in the store in rust of which the AS code is agnostic.
+Testing derived fields is a feature which (as the example below shows) allows the user to set a virtual field in a certain entity and have another entity be loaded automatically if the derived field matches the id from the first entity.
+
 
 `tests/token-lock-wallet/utils.ts`
 ```typescript
@@ -957,16 +957,22 @@ describe("@derivedFrom fields", () => {
     let operatedAccount = GraphAccount.load("1")!
     operatedAccount.operators = [mainAccount.id]
     operatedAccount.save()
-
+   
     mockNameSignalTransaction("1234", mainAccount.id)
     mockNameSignalTransaction("2", mainAccount.id)
 
     mainAccount = GraphAccount.load("12")!
 
-    assert.assertNotNull(mainAccount.get("nameSignalTransactions"))
-    assert.assertNotNull(mainAccount.get("operatorOf"))
-    assert.i32Equals(2, mainAccount.nameSignalTransactions.length)
-    assert.stringEquals("1", mainAccount.operatorOf[0])
+    assert.assertNull(mainAccount.get("nameSignalTransactions"))
+    assert.assertNull(mainAccount.get("operatorOf"))
+
+    const nameSignalTransactions = mainAccount.nameSignalTransactions.load();
+    const operatorsOfMainAccount = mainAccount.operatorOf.load();
+    
+    assert.i32Equals(2, nameSignalTransactions.length)
+    assert.i32Equals(1, operatorsOfMainAccount.length)
+
+    assert.stringEquals("1", operatorsOfMainAccount[0].id)
 
     mockNameSignalTransaction("2345", mainAccount.id)
 
@@ -977,11 +983,9 @@ describe("@derivedFrom fields", () => {
     store.remove("NameSignalTransaction", "2")
 
     mainAccount = GraphAccount.load("12")!
-    assert.i32Equals(1, mainAccount.nameSignalTransactions.length)
+    assert.i32Equals(1, mainAccount.nameSignalTransactions.load().length)
   })
 ```
-
-❗ The store is updated on **every** assertion or `entity.load()` function call. When this happens any derived data pointing to a non-existent entity will be deleted.
 
 ### Testing dynamic data sources
 Testing dynamic data sources can be be done by mocking the return value of the `context()`, `address()` and `network()` functions of the `dataSource` namespace.

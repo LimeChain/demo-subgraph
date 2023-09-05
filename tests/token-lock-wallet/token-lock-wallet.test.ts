@@ -107,6 +107,6 @@ describe("@derivedFrom fields", () => {
     store.remove("NameSignalTransaction", "2")
 
     mainAccount = GraphAccount.load("12")!
-    // assert.i32Equals(1, mainAccount.nameSignalTransactions.length)
+    assert.i32Equals(1, mainAccount.nameSignalTransactions.load().length)
   })
 })
