@@ -1,10 +1,11 @@
-import { assert, test, newMockEvent, dataSourceMock, describe, beforeAll, afterAll, logStore, clearStore } from "matchstick-as/assembly/index"
+import { assert, test, newMockEvent, dataSourceMock, describe, beforeAll, afterAll, logDataSources, clearStore } from "matchstick-as/assembly/index"
 import { Address, BigInt, Bytes, DataSourceContext, store, Value } from "@graphprotocol/graph-ts"
 
 import { handleApproveTokenDestinations } from "../../src/token-lock-wallet"
 import { ApproveTokenDestinations } from "../../generated/templates/GraphTokenLockWallet/GraphTokenLockWallet"
 import { NameSignalTransaction, TokenLockWallet, GraphAccount, Subgraph } from "../../generated/schema"
 import { mockGraphAccount, mockNameSignalTransaction } from "./utils"
+import { GraphTokenLockWallet } from "../../generated/templates"
 
 describe("dataSourceMock", () => {
   beforeAll(() => {
@@ -59,6 +60,18 @@ describe("dataSourceMock", () => {
 
     assert.assertTrue(wallet.tokenDestinationsApproved)
     assert.bigIntEquals(wallet.tokensReleased, BigInt.fromI32(325))
+  })
+
+  test("dataSource creation example", () => {
+    GraphTokenLockWallet.create(Address.fromString("0xA16081F360e3847006dB660bae1c6d1b2e17eC2A"));
+
+    assert.dataSourceCount("GraphTokenLockWallet", 1);
+    let context = new DataSourceContext()
+    context.set("contextVal", Value.fromI32(325))
+    GraphTokenLockWallet.createWithContext(Address.fromString("0xA16081F360e3847006dB660bae1c6d1b2e17eC2B"), context);
+    assert.dataSourceCount("GraphTokenLockWallet", 2);
+    assert.dataSourceExists("GraphTokenLockWallet", "0xA16081F360e3847006dB660bae1c6d1b2e17eC2B".toLowerCase());
+    logDataSources("GraphTokenLockWallet");
   })
 })
 

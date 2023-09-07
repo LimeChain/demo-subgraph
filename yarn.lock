@@ -2434,10 +2434,9 @@
   "resolved" "https://registry.npmjs.org/make-error/-/make-error-1.3.6.tgz"
   "version" "1.3.6"
 
-"matchstick-as@^0.6.0-cache-beta":
-  "integrity" "sha512-x+YTJHzRKecTrdVsSgHI32h37g91OOedJsxyK3cK5BodS5qp/tFE3LlKX33/tE4hlCUDC/71He8wUYoLPGE0xg=="
-  "resolved" "https://registry.npmjs.org/matchstick-as/-/matchstick-as-0.6.0-cache-beta.tgz"
-  "version" "0.6.0-cache-beta"
+"matchstick-as@https://github.com/LimeChain/matchstick-as#feat/assert-dynamic-datasources":
+  "resolved" "git+ssh://git@github.com/LimeChain/matchstick-as.git#fc16c6e572629ae851cdc96cc923c1db5b69c9c4"
+  "version" "0.5.2"
   dependencies:
     "wabt" "1.0.24"
 
