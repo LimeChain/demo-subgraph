@@ -30,6 +30,18 @@ dataSources:
           handler: handleCreateGravatar
       file: ./src/gravity.ts
 templates:
+  - name: TokenMetadata
+    kind: file/ipfs
+    mapping:
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      file: ./src/mapping.ts
+      handler: handleMetadata
+      entities:
+        - TokenMetadata
+      abis:
+        - name: GraphTokenLockWallet
+          file: ./abis/GraphTokenLockWallet.json
   - kind: ethereum/contract
     name: GraphTokenLockWallet
     network: mainnet
@@ -37,7 +49,7 @@ templates:
       abi: GraphTokenLockWallet
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.6
+      apiVersion: 0.0.7
       language: wasm/assemblyscript
       file: ./src/token-lock-wallet.ts
       entities:
