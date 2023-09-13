@@ -1208,6 +1208,24 @@ enum Revocability {
   Disabled
 }
 
+
+"""
+Token Lock Wallets which hold locked GRT
+"""
+type TokenLockMetadata @entity {
+  "The address of the token lock wallet"
+  id: ID!
+  "Start time of the release schedule"
+  startTime: BigInt!
+  "End time of the release schedule"
+  endTime: BigInt!
+  "Number of periods between start time and end time"
+  periods: BigInt!
+  "Time when the releases start"
+  releaseStartTime: BigInt!
+}
+
+
 """
 Full test search for displayName and description on the Subgraph Entity
 """

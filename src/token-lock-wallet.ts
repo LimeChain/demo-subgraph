@@ -1,4 +1,4 @@
-import { BigInt, dataSource } from '@graphprotocol/graph-ts'
+import { BigInt, Bytes, dataSource, json } from '@graphprotocol/graph-ts'
 import {
   TokensReleased,
   TokensWithdrawn,
@@ -7,8 +7,7 @@ import {
   ApproveTokenDestinations,
   RevokeTokenDestinations,
 } from '../generated/templates/GraphTokenLockWallet/GraphTokenLockWallet'
-
-import { TokenLockWallet } from '../generated/schema'
+import { TokenLockWallet, TokenLockMetadata } from '../generated/schema'
 
 export function handleTokensReleased(event: TokensReleased): void {
   let tokenLockWallet = TokenLockWallet.load(event.address.toHexString())!
@@ -51,4 +50,25 @@ export function handleRevokeTokenDestinations(event: RevokeTokenDestinations): v
   let tokenLockWallet = TokenLockWallet.load(event.address.toHexString())!
   tokenLockWallet.tokenDestinationsApproved = false
   tokenLockWallet.save()
+}
+
+export function handleMetadata(content: Bytes): void {
+  let tokenMetadata = new TokenLockMetadata(dataSource.stringParam());
+  const value = json.fromBytes(content).toObject()
+  
+  if (value) {
+    const startTime = value.get('startTime')
+    const endTime = value.get('endTime')
+    const periods = value.get('periods')
+    const releaseStartTime = value.get('releaseStartTime')
+
+    if (startTime && endTime && periods && releaseStartTime) {
+      tokenMetadata.startTime = startTime.toBigInt()
+      tokenMetadata.endTime = endTime.toBigInt()
+      tokenMetadata.periods = periods.toBigInt()
+      tokenMetadata.releaseStartTime = releaseStartTime.toBigInt()
+    }
+
+    tokenMetadata.save()
+  }
 }
