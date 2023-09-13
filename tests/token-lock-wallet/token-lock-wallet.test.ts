@@ -1,4 +1,4 @@
-import { assert, test, newMockEvent, dataSourceMock, describe, beforeAll, afterAll, logDataSources, clearStore, mockIpfsFile, readFile, logStore } from "../../../matchstick-as/assembly/index"
+import { assert, test, newMockEvent, dataSourceMock, describe, beforeAll, afterAll, logDataSources, clearStore, mockIpfsFile, readFile, logStore } from "matchstick-as/assembly/index"
 import { Address, BigInt, Bytes, DataSourceContext, ipfs, json, store, Value } from "@graphprotocol/graph-ts"
 
 import { handleApproveTokenDestinations, handleMetadata } from "../../src/token-lock-wallet"
