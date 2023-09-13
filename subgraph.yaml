@@ -58,4 +58,18 @@ templates:
           handler: handleApproveTokenDestinations
         - event: RevokeTokenDestinations()
           handler: handleRevokeTokenDestinations
+  - kind: file/ipfs
+    name: GraphTokenLockMetadata
+    network: mainnet
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.6
+      language: wasm/assemblyscript
+      file: ./src/token-lock-wallet.ts
+      handler: handleMetadata
+      entities:
+        - TokenLockWalletMetadata
+      abis:
+        - name: GraphTokenLockWallet
+          file: ./abis/GraphTokenLockWallet.json
   

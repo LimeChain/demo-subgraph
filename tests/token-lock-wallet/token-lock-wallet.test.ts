@@ -1,10 +1,11 @@
-import { assert, test, newMockEvent, dataSourceMock, describe, beforeAll, afterAll, logStore, clearStore } from "matchstick-as/assembly/index"
-import { Address, BigInt, Bytes, DataSourceContext, store, Value } from "@graphprotocol/graph-ts"
+import { assert, test, newMockEvent, dataSourceMock, describe, beforeAll, afterAll, logDataSources, clearStore, mockIpfsFile, readFile, logStore } from "matchstick-as/assembly/index"
+import { Address, BigInt, Bytes, DataSourceContext, ipfs, json, store, Value } from "@graphprotocol/graph-ts"
 
-import { handleApproveTokenDestinations } from "../../src/token-lock-wallet"
+import { handleApproveTokenDestinations, handleMetadata } from "../../src/token-lock-wallet"
 import { ApproveTokenDestinations } from "../../generated/templates/GraphTokenLockWallet/GraphTokenLockWallet"
-import { NameSignalTransaction, TokenLockWallet, GraphAccount, Subgraph } from "../../generated/schema"
+import { NameSignalTransaction, TokenLockWallet, GraphAccount, Subgraph, TokenLockMetadata } from "../../generated/schema"
 import { mockGraphAccount, mockNameSignalTransaction } from "./utils"
+import { GraphTokenLockWallet, GraphTokenLockMetadata } from "../../generated/templates"
 
 describe("dataSourceMock", () => {
   beforeAll(() => {
@@ -59,6 +60,47 @@ describe("dataSourceMock", () => {
 
     assert.assertTrue(wallet.tokenDestinationsApproved)
     assert.bigIntEquals(wallet.tokensReleased, BigInt.fromI32(325))
+  })
+
+  test("ethereum/contract dataSource creation example", () => {
+    GraphTokenLockWallet.create(Address.fromString("0xA16081F360e3847006dB660bae1c6d1b2e17eC2A"));
+
+    assert.dataSourceCount("GraphTokenLockWallet", 1);
+    let context = new DataSourceContext()
+    context.set("contextVal", Value.fromI32(325))
+    GraphTokenLockWallet.createWithContext(Address.fromString("0xA16081F360e3847006dB660bae1c6d1b2e17eC2B"), context);
+    assert.dataSourceCount("GraphTokenLockWallet", 2);
+    assert.dataSourceExists("GraphTokenLockWallet", "0xA16081F360e3847006dB660bae1c6d1b2e17eC2B".toLowerCase());
+    logDataSources("GraphTokenLockWallet");
+  })
+
+  test("file/ipfs dataSource creation example", () => {
+    const ipfshash = 'QmaXzZhcYnsisuue5WRdQDH6FDvqkLQX1NckLqBYeYYEfm'
+    GraphTokenLockMetadata.create(ipfshash);
+
+    assert.dataSourceCount("GraphTokenLockMetadata", 1);
+    assert.dataSourceExists("GraphTokenLockMetadata", ipfshash);
+    logDataSources("GraphTokenLockMetadata");
+
+    const tokenIpfsAddress = `${ipfshash}.json`
+    const content = readFile(`tests/ipfs/${tokenIpfsAddress}`)
+
+    dataSourceMock.resetValues()
+
+    let metaContext = new DataSourceContext()
+    metaContext.set("address", Value.fromString(tokenIpfsAddress))
+    dataSourceMock.setReturnValues(tokenIpfsAddress, "rinkeby", metaContext);
+
+    handleMetadata(content)
+    
+    const metadata = TokenLockMetadata.load(tokenIpfsAddress);
+    
+    assert.bigIntEquals(metadata!.endTime, BigInt.fromI32(1))
+    assert.bigIntEquals(metadata!.periods, BigInt.fromI32(1))
+    assert.bigIntEquals(metadata!.releaseStartTime, BigInt.fromI32(1))
+    assert.bigIntEquals(metadata!.startTime, BigInt.fromI32(1))
+
+    logStore()
   })
 })
 
