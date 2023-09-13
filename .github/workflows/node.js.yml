@@ -34,4 +34,4 @@ jobs:
           ssh://git@github.com/
     - run: npm ci
     - run: npm run codegen
-    - run: npm run test -- --version 0.6.0-beta4
+    - run: npm run test -- --version 0.6.0-beta5
