@@ -1241,42 +1241,7 @@ You could also add a custom `coverage` command to your `package.json` file, like
 
 That will execute the coverage tool and you should see something like this in the terminal:
 
-```sh
-$ graph test -c
-Skipping download/install step because binary already exists at /Users/petko/work/demo-subgraph/node_modules/binary-install-raw/bin/0.4.0
-
-___  ___      _       _         _   _      _
-|  \/  |     | |     | |       | | (_)    | |
-| .  . | __ _| |_ ___| |__  ___| |_ _  ___| | __
-| |\/| |/ _` | __/ __| '_ \/ __| __| |/ __| |/ /
-| |  | | (_| | || (__| | | \__ \ |_| | (__|   <
-\_|  |_/\__,_|\__\___|_| |_|___/\__|_|\___|_|\_\
-
-Compiling...
-
-Running in coverage report mode.
- ️
-Reading generated test modules... 🔎️
-
-Generating coverage report 📝
-
-Handlers for source 'Gravity':
-Handler 'handleNewGravatar' is tested.
-Handler 'handleUpdatedGravatar' is not tested.
-Handler 'handleCreateGravatar' is tested.
-Test coverage: 66.7% (2/3 handlers).
-
-Handlers for source 'GraphTokenLockWallet':
-Handler 'handleTokensReleased' is not tested.
-Handler 'handleTokensWithdrawn' is not tested.
-Handler 'handleTokensRevoked' is not tested.
-Handler 'handleManagerUpdated' is not tested.
-Handler 'handleApproveTokenDestinations' is not tested.
-Handler 'handleRevokeTokenDestinations' is not tested.
-Test coverage: 0.0% (0/6 handlers).
-
-Global test coverage: 22.2% (2/9 handlers).
-```
+![Matchstick coverage mode”](./images/coverage-mode.png)
 
 ### Test run time duration in the log output
 
