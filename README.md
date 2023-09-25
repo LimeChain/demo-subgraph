@@ -1,21 +1,22 @@
 # Demo Subgraph (The Graph) showcasing unit testing with Matchstick!
 
-❗ This repository reflects the changes made in the latest version of [Matchstick](https://github.com/LimeChain/matchstick/) (a.k.a. it follows the main branch).
+❗ This repository reflects the changes made in the latest version of [Matchstick](https://github.com/LimeChain/matchstick/) (a.k.a. it follows the main branch). For more information check out the official TheGraph [documentation](https://thegraph.com/docs/en/developing/unit-testing-framework/).
+
 
 ## Overview
 ```sh
-Matchstick 🔥 0.4.3
+Matchstick 🔥 0.6.0
 Limechain <https://limechain.tech>
 Unit testing framework for Subgraph development on The Graph protocol.
 
 USAGE:
-    graph test [test_suites]...
+    matchstick [FLAGS] [test_suites]...
 
 FLAGS:
-    -h, --help                    Prints help information
-    -v, --version <tag>           Choose the version of the rust binary that you want to be downloaded/used
-    -f, --force                   Overwrite folder + file when downloading
-    -l, --logs                    Logs to the console information about the OS, CPU model and download url (debugging purposes)
+    -c, --coverage     Generate code coverage report.
+    -h, --help         Prints help information
+    -r, --recompile    Force-recompiles the tests.
+    -V, --version      Prints version information
 
 ARGS:
     <test_suites>...    Please specify the names of the test suites you would like to run.
@@ -579,7 +580,7 @@ Now in order to run our tests you simply need to run the following in your subgr
 
 And if all goes well you should be greeted with the following:
 
-![Matchstick saying “All tests passed!”](/img/matchstick-tests-passed.png)
+![Matchstick saying “All tests passed!”](./images/matchstick-tests-passed.png)
 
 ## Common test scenarios
 
