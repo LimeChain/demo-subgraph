@@ -417,35 +417,39 @@ describe("handleUpdatedGravatar", () => {
 ## Asserts
 
 ```typescript
-fieldEquals(entityType: string, id: string, fieldName: string, expectedVal: string)
+fieldEquals(entityType: string, id: string, fieldName: string, expectedVal: string, message: string | null = null)
 
-equals(expected: ethereum.Value, actual: ethereum.Value)
+equals(expected: ethereum.Value, actual: ethereum.Value, message: string | null = null)
 
-notInStore(entityType: string, id: string)
+notInStore(entityType: string, id: string, message: string | null = null)
 
-addressEquals(address1: Address, address2: Address)
+addressEquals(address1: Address, address2: Address, message: string | null = null)
 
-bytesEquals(bytes1: Bytes, bytes2: Bytes)
+bytesEquals(bytes1: Bytes, bytes2: Bytes, message: string | null = null)
 
-i32Equals(number1: i32, number2: i32)
+i32Equals(number1: i32, number2: i32, message: string | null = null)
 
-bigIntEquals(bigInt1: BigInt, bigInt2: BigInt)
+bigIntEquals(bigInt1: BigInt, bigInt2: BigInt, message: string | null = null)
 
-booleanEquals(bool1: boolean, bool2: boolean)
+booleanEquals(bool1: boolean, bool2: boolean, message: string | null = null)
 
-stringEquals(string1: string, string2: string)
+stringEquals(string1: string, string2: string, message: string | null = null)
 
-arrayEquals(array1: Array<ethereum.Value>, array2: Array<ethereum.Value>)
+arrayEquals(array1: Array<ethereum.Value>, array2: Array<ethereum.Value>, message: string | null = null)
 
-tupleEquals(tuple1: ethereum.Tuple, tuple2: ethereum.Tuple)
+tupleEquals(tuple1: ethereum.Tuple, tuple2: ethereum.Tuple, message: string | null = null)
 
-assertTrue(value: boolean)
+assertTrue(value: boolean, message: string | null = null)
 
-assertNull<T>(value: T)
+assertNull<T>(value: T, message: string | null = null)
 
-assertNotNull<T>(value: T)
+assertNotNull<T>(value: T, message: string | null = null)
 
-entityCount(entityType: string, expectedCount: i32)
+entityCount(entityType: string, expectedCount: i32, message: string | null = null)
+
+dataSourceCount(template: string, expectedCount: i32, message: string | null = null);
+
+dataSourceExists(template: string, address: string, message: string | null = null);
 ```
 
 As of version 0.6.0, asserts support custom error messages as well
@@ -659,7 +663,9 @@ createMockedFunction(contractAddress, 'getGravatar', 'getGravatar(address):(stri
   .reverts()
 ```
 
-### Mocking IPFS files (from matchstick 0.4.1)
+### Mocking IPFS files (old/deprecated)
+
+!Note: For testing `file/ipfs` templates see [here](#testing-fileipfs-templates)
 
 Users can mock IPFS files by using `mockIpfsFile(hash, filePath)` function. The function accepts two arguments, the first one is the IPFS file hash/path and the second one is the path to a local file.
 
