@@ -1,21 +1,22 @@
 # Demo Subgraph (The Graph) showcasing unit testing with Matchstick!
 
-❗ This repository reflects the changes made in the latest version of [Matchstick](https://github.com/LimeChain/matchstick/) (a.k.a. it follows the main branch).
+❗ This repository reflects the changes made in the latest version of [Matchstick](https://github.com/LimeChain/matchstick/) (a.k.a. it follows the main branch). For more information check out the official TheGraph [documentation](https://thegraph.com/docs/en/developing/unit-testing-framework/).
+
 
 ## Overview
 ```sh
-Matchstick 🔥 0.4.3
+Matchstick 🔥 0.6.0
 Limechain <https://limechain.tech>
 Unit testing framework for Subgraph development on The Graph protocol.
 
 USAGE:
-    graph test [test_suites]...
+    matchstick [FLAGS] [test_suites]...
 
 FLAGS:
-    -h, --help                    Prints help information
-    -v, --version <tag>           Choose the version of the rust binary that you want to be downloaded/used
-    -f, --force                   Overwrite folder + file when downloading
-    -l, --logs                    Logs to the console information about the OS, CPU model and download url (debugging purposes)
+    -c, --coverage     Generate code coverage report.
+    -h, --help         Prints help information
+    -r, --recompile    Force-recompiles the tests.
+    -V, --version      Prints version information
 
 ARGS:
     <test_suites>...    Please specify the names of the test suites you would like to run.
@@ -68,9 +69,9 @@ Now all files, under the `gravity` folder, ending with `.test.ts` are interprete
 
  - **Matchstick** is case-insensitive when it comes to test suite names. Meaning, *Gravity = gravity = gRaVitY*.
 
-## Tests structure (>=0.5.0)
+## Tests structure
 
-***❗ IMPORTANT: Requires matchstick-as >=0.5.0***
+_**IMPORTANT: The test structure described below depens on `matchstick-as` version >=0.5.0**_
 
 ### describe()
 
@@ -113,7 +114,8 @@ describe("handleUpdatedGravatar()", () => {
   })
 })
 ```
-__________________________________________________________________
+
+---
 
 ### test()
 
@@ -141,7 +143,8 @@ test("handleNewGravatar() should create a new entity", () => {
 
 
 ```
-__________________________________________________________________
+
+---
 
 ### beforeAll()
 
@@ -149,7 +152,7 @@ Runs a code block before any of the tests in the file. If `beforeAll` is declare
 
 Examples:
 
-Code inside `beforeAll` will execute once before *all* tests in the file.
+Code inside `beforeAll` will execute once before _all_ tests in the file.
 
 ```typescript
 import { describe, test, beforeAll } from "matchstick-as/assembly/index"
@@ -200,7 +203,8 @@ describe("handleUpdatedGravatar()", () => {
   })
 })
 ```
-__________________________________________________________________
+
+---
 
 ### afterAll()
 
@@ -208,7 +212,7 @@ Runs a code block after all of the tests in the file. If `afterAll` is declared 
 
 Example:
 
-Code inside `afterAll` will execute once after *all* tests in the file.
+Code inside `afterAll` will execute once after _all_ tests in the file.
 
 ```typescript
 import { describe, test, afterAll } from "matchstick-as/assembly/index"
@@ -260,14 +264,14 @@ describe("handleUpdatedGravatar", () => {
   })
 })
 ```
-__________________________________________________________________
+
+---
 
 ### beforeEach()
 
 Runs a code block before every test. If `beforeEach` is declared inside of a `describe` block, it runs before each test in that `describe` block.
 
-Examples:
-Code inside `beforeEach` will execute before each tests.
+Examples: Code inside `beforeEach` will execute before each tests.
 
 ```typescript
 import { describe, test, beforeEach, clearStore } from "matchstick-as/assembly/index"
@@ -293,39 +297,38 @@ describe("handleNewGravatars, () => {
 Code inside `beforeEach` will execute only before each test in the that describe
 
 ```typescript
-import { describe, test, beforeEach } from "matchstick-as/assembly/index"
-import { handleUpdatedGravatar, handleNewGravatar } from "../../src/gravity"
+import { describe, test, beforeEach } from 'matchstick-as/assembly/index'
+import { handleUpdatedGravatar, handleNewGravatar } from '../../src/gravity'
 
-describe("handleUpdatedGravatars", () => {
+describe('handleUpdatedGravatars', () => {
   beforeEach(() => {
-    let gravatar = new Gravatar("0x0")
-    gravatar.displayName = "First Gravatar"
-    gravatar.imageUrl = ""
+    let gravatar = new Gravatar('0x0')
+    gravatar.displayName = 'First Gravatar'
+    gravatar.imageUrl = ''
     gravatar.save()
   })
 
-  test("Upates the displayName", () => {
-     assert.fieldEquals("Gravatar", "0x0", "displayNamd", "First Gravatar")
+  test('Upates the displayName', () => {
+    assert.fieldEquals('Gravatar', '0x0', 'displayName', 'First Gravatar')
 
     // code that should update the displayName to 1st Gravatar
 
-    assert.fieldEquals("Gravatar", "0x0", "displayName", "1st Gravatar")
-    store.remove("Gravatar", "0x0")
+    assert.fieldEquals('Gravatar', '0x0', 'displayName', '1st Gravatar')
+    store.remove('Gravatar', '0x0')
   })
 
-  test("Updates the imageUrl", () => {
-    assert.fieldEquals("Gravatar", "0x0", "imageUrl", "")
+  test('Updates the imageUrl', () => {
+    assert.fieldEquals('Gravatar', '0x0', 'imageUrl', '')
 
     // code that should changes the imageUrl to https://www.gravatar.com/avatar/0x0
 
-    assert.fieldEquals("Gravatar", "0x0", "imageUrl", "https://www.gravatar.com/avatar/0x0")
-    store.remove("Gravatar", "0x0")
+    assert.fieldEquals('Gravatar', '0x0', 'imageUrl', 'https://www.gravatar.com/avatar/0x0')
+    store.remove('Gravatar', '0x0')
   })
 })
-
-
 ```
-__________________________________________________________________
+
+---
 
 ### afterEach()
 
@@ -355,7 +358,7 @@ describe("handleNewGravatar", () => {
 
 describe("handleUpdatedGravatar", () => {
   test("Upates the displayName", () => {
-     assert.fieldEquals("Gravatar", "0x0", "displayNamd", "First Gravatar")
+     assert.fieldEquals("Gravatar", "0x0", "displayName", "First Gravatar")
 
     // code that should update the displayName to 1st Gravatar
 
@@ -395,7 +398,7 @@ describe("handleUpdatedGravatar", () => {
   })
 
   test("Upates the displayName", () => {
-     assert.fieldEquals("Gravatar", "0x0", "displayNamd", "First Gravatar")
+     assert.fieldEquals("Gravatar", "0x0", "displayName", "First Gravatar")
 
     // code that should update the displayName to 1st Gravatar
 
@@ -415,138 +418,69 @@ describe("handleUpdatedGravatar", () => {
 ## Asserts
 
 ```typescript
-fieldEquals(entityType: string, id: string, fieldName: string, expectedVal: string)
+fieldEquals(entityType: string, id: string, fieldName: string, expectedVal: string, message: string | null = null)
 
-equals(expected: ethereum.Value, actual: ethereum.Value)
+equals(expected: ethereum.Value, actual: ethereum.Value, message: string | null = null)
 
-notInStore(entityType: string, id: string)
+notInStore(entityType: string, id: string, message: string | null = null)
 
-addressEquals(address1: Address, address2: Address)
+addressEquals(address1: Address, address2: Address, message: string | null = null)
 
-bytesEquals(bytes1: Bytes, bytes2: Bytes)
+bytesEquals(bytes1: Bytes, bytes2: Bytes, message: string | null = null)
 
-i32Equals(number1: i32, number2: i32)
+i32Equals(number1: i32, number2: i32, message: string | null = null)
 
-bigIntEquals(bigInt1: BigInt, bigInt2: BigInt)
+bigIntEquals(bigInt1: BigInt, bigInt2: BigInt, message: string | null = null)
 
-booleanEquals(bool1: boolean, bool2: boolean)
+booleanEquals(bool1: boolean, bool2: boolean, message: string | null = null)
 
-stringEquals(string1: string, string2: string)
+stringEquals(string1: string, string2: string, message: string | null = null)
 
-arrayEquals(array1: Array<ethereum.Value>, array2: Array<ethereum.Value>)
+arrayEquals(array1: Array<ethereum.Value>, array2: Array<ethereum.Value>, message: string | null = null)
 
-tupleEquals(tuple1: ethereum.Tuple, tuple2: ethereum.Tuple)
+tupleEquals(tuple1: ethereum.Tuple, tuple2: ethereum.Tuple, message: string | null = null)
 
-assertTrue(value: boolean)
+assertTrue(value: boolean, message: string | null = null)
 
-assertNull<T>(value: T)
+assertNull<T>(value: T, message: string | null = null)
 
-assertNotNull<T>(value: T)
+assertNotNull<T>(value: T, message: string | null = null)
 
-entityCount(entityType: string, expectedCount: i32)
+entityCount(entityType: string, expectedCount: i32, message: string | null = null)
+
+dataSourceCount(template: string, expectedCount: i32, message: string | null = null);
+
+dataSourceExists(template: string, address: string, message: string | null = null);
 ```
 
-## Example Usage 📖
+As of version 0.6.0, asserts support custom error messages as well
 
-***NOTE:*** Since `graph-cli 0.26.1, 0.27.1, 0.28.2 and 0.29.1`, `graph codegen` will not generate default values the required fields on `.save()`, you will need to set all required fields manually. Matchstick will fail the test and print an error message if any required fields are not present.
-
-If you prefer learning through watching, check out the [video tutorials](https://www.youtube.com/watch?v=T-orbT4gRiA)!
-
-Let's explore a few common scenarios where we'd want to test our handler functions. We've created a [**demo-subgraph repo**](https://github.com/LimeChain/demo-subgraph "demo-subgraph") to fully demonstrate how to use the framework and all its functionality. For the full examples, feel free to check it out in depth. Let's dive in! We've got the following simple **generated** event:
 ```typescript
-export class NewGravatar extends ethereum.Event {
-  get params(): NewGravatar__Params {
-    return new NewGravatar__Params(this);
-  }
-}
-
-export class NewGravatar__Params {
-  _event: NewGravatar;
-
-  constructor(event: NewGravatar) {
-    this._event = event;
-  }
-
-  get id(): BigInt {
-    return this._event.parameters[0].value.toBigInt();
-  }
-
-  get owner(): Address {
-    return this._event.parameters[1].value.toAddress();
-  }
-
-  get displayName(): string {
-    return this._event.parameters[2].value.toString();
-  }
-
-  get imageUrl(): string {
-    return this._event.parameters[3].value.toString();
-  }
-}
+assert.fieldEquals("Gravatar", "0x123", "id", "0x123", "Id should be 0x123");
+assert.equals(ethereum.Value.fromI32(1), ethereum.Value.fromI32(1), "Value should equal 1");
+assert.notInStore("Gravatar", "0x124", "Gravatar should not be in store");
+assert.addressEquals(Address.zero(), Address.zero(), "Address should be zero");
+assert.bytesEquals(Bytes.fromUTF8("0x123"), Bytes.fromUTF8("0x123"), "Bytes should be equal");
+assert.i32Equals(2, 2, "I32 should equal 2");
+assert.bigIntEquals(BigInt.fromI32(1), BigInt.fromI32(1), "BigInt should equal 1");
+assert.booleanEquals(true, true, "Boolean should be true");
+assert.stringEquals("1", "1", "String should equal 1");
+assert.arrayEquals([ethereum.Value.fromI32(1)], [ethereum.Value.fromI32(1)], "Arrays should be equal");
+assert.tupleEquals(changetype<ethereum.Tuple>([ethereum.Value.fromI32(1)]), changetype<ethereum.Tuple>([ethereum.Value.fromI32(1)]), "Tuples should be equal");
+assert.assertTrue(true, "Should be true");
+assert.assertNull(null, "Should be null");
+assert.assertNotNull("not null", "Should be not null");
+assert.entityCount("Gravatar", 1, "There should be 2 gravatars");
+assert.dataSourceCount("GraphTokenLockWallet", 1, "GraphTokenLockWallet template should have one data source");
+assert.dataSourceExists("GraphTokenLockWallet", Address.zero().toHexString(), "GraphTokenLockWallet should have a data source for zero address");
 ```
 
-Along with the following simple **generated** entity:
-```typescript
-export class Gravatar extends Entity {
-  constructor(id: string) {
-    super();
-    this.set("id", Value.fromString(id));
-  }
+## Write a Unit Test
 
-  save(): void {
-    let id = this.get("id");
-    assert(id !== null, "Cannot save Gravatar entity without an ID");
-    assert(
-      id.kind == ValueKind.STRING,
-      "Cannot save Gravatar entity with non-string ID. " +
-        'Considering using .toHex() to convert the "id" to a string.'
-    );
-    store.set("Gravatar", id.toString(), this);
-  }
+Let's see how a simple unit test would look like using the Gravatar examples in the [Demo Subgraph](https://github.com/LimeChain/demo-subgraph/blob/main/src/gravity.ts).
 
-  static load(id: string): Gravatar | null {
-    return store.get("Gravatar", id) as Gravatar | null;
-  }
+Assuming we have the following handler function (along with two helper functions to make our life easier):
 
-  get id(): string {
-    let value = this.get("id");
-    return value.toString();
-  }
-
-  set id(value: string) {
-    this.set("id", Value.fromString(value));
-  }
-
-  get owner(): Bytes {
-    let value = this.get("owner");
-    return value.toBytes();
-  }
-
-  set owner(value: Bytes) {
-    this.set("owner", Value.fromBytes(value));
-  }
-
-  get displayName(): string {
-    let value = this.get("displayName");
-    return value.toString();
-  }
-
-  set displayName(value: string) {
-    this.set("displayName", Value.fromString(value));
-  }
-
-  get imageUrl(): string {
-    let value = this.get("imageUrl");
-    return value.toString();
-  }
-
-  set imageUrl(value: string) {
-    this.set("imageUrl", Value.fromString(value));
-  }
-}
-```
-
-And finally, we have a handler function (**that we've written in our** `gravity.ts` **file**) that deals with the events. As well as two little helper functions - one for multiple events of the same type and another for creating a filled instance of ethereum.Event - `newMockEvent` (Although `changetype` is inherently unsafe, most events can be safely upcast to the desired ethereum.Event extending class as shown in the example below):
 ```typescript
 export function handleNewGravatar(event: NewGravatar): void {
   let gravatar = new Gravatar(event.params.id.toHex())
@@ -557,205 +491,226 @@ export function handleNewGravatar(event: NewGravatar): void {
 }
 
 export function handleNewGravatars(events: NewGravatar[]): void {
-  events.forEach(event => {
-    handleNewGravatar(event);
-  });
-}
-
-export function createNewGravatarEvent(id: i32, ownerAddress: string, displayName: string, imageUrl: string): NewGravatar {
-  let newGravatarEvent = changetype<NewGravatar>(newMockEvent())
-  newGravatarEvent.parameters = new Array();
-  let idParam = new ethereum.EventParam("id", ethereum.Value.fromI32(id));
-  let addressParam = new ethereum.EventParam("ownderAddress", ethereum.Value.fromAddress(Address.fromString(ownerAddress)));
-  let displayNameParam = new ethereum.EventParam("displayName", ethereum.Value.fromString(displayName));
-  let imageUrlParam = new ethereum.EventParam("imageUrl", ethereum.Value.fromString(imageUrl));
-
-  newGravatarEvent.parameters.push(idParam);
-  newGravatarEvent.parameters.push(addressParam);
-  newGravatarEvent.parameters.push(displayNameParam);
-  newGravatarEvent.parameters.push(imageUrlParam);
-
-  return newGravatarEvent;
-}
-```
-That's all well and good, but what if we had more complex logic in the handler function? We would want to check that the event that gets saved in the store looks the way we want it to look like.
-
-What we need to do is create a test file in the `tests/` subdirectory under the root folder (or specify a different name/location by using the `testsFolder` attribute in the subgraph.yaml).
-We can name it however we want as long as it ends with `.test.ts` - let's say `gravity.test.ts`.
-
-```typescript
-import { clearStore, test, assert } from "matchstick-as/assembly/index";
-import { Gravatar } from "../../generated/schema";
-import { NewGravatar } from "../../generated/Gravity/Gravity";
-import { createNewGravatarEvent, handleNewGravatars } from "../mappings/gravity";
-
-describe("Mocked Events", () => {
-  afterEach(() => {
-    clearStore()
-  })
-
-  test("Can call mappings with custom events", () => {
-    // Call mappings
-    let newGravatarEvent = createNewGravatarEvent(
-      0xdead,
-      "0x89205A3A3b2A69De6Dbf7f01ED13B2108B2c43e7",
-      "Gravatar 0xdead",
-      "https://example.com/image0xdead.png"
-    )
-
-    let anotherGravatarEvent = createNewGravatarEvent(
-      0xbeef,
-      "0x89205A3A3b2A69De6Dbf7f01ED13B2108B2c43e7",
-      "Gravatar 0xbeef",
-      "https://example.com/image0xbeef.png"
-    )
-
-    handleNewGravatars([newGravatarEvent, anotherGravatarEvent])
-
-    assert.entityCount(GRAVATAR_ENTITY_TYPE, 2)
-    assert.fieldEquals(GRAVATAR_ENTITY_TYPE, "0xdead", "displayName", "Gravatar 0xdead")
-    assert.fieldEquals(GRAVATAR_ENTITY_TYPE, "0xbeef", "displayName", "Gravatar 0xbeef")
-  })
-})
-
-```
-
-That's a lot to unpack! First off, an important thing to notice is that we're importing things from `matchstick-as`, that's our AssemblyScript helper library (distributed as an npm module), which you can check out [here](https://github.com/LimeChain/matchstick-as "here"). It provides us with useful testing methods and also defines the `test()` function which we will use to build our test blocks. The rest of it is pretty straightforward - here's what happens:
-- We're setting up our initial state and adding one custom Gravatar entity;
-- We define two `NewGravatar` event objects along with their data, using the `createNewGravatarEvent()` function;
-- We're calling out handler methods for those events - `handleNewGravatars()` and passing in the list of our custom events;
-- We assert the state of the store. How does that work? - We're passing a unique combination of Entity type and id. Then we check a specific field on that Entity and assert that it has the value we expect it to have. We're doing this both for the initial burger Entity we added and for the one that gets added when the handler function is called;
-- And lastly - we're cleaning the store using `clearStore()` so that our next test can start with a fresh and empty store object. We can define as many test blocks as we want.
-
-There we go - we've tested our first event handler! 👏
-
-Now let's recap and take a look at some concise, common **use cases**, which include what we already covered plus more useful things we can use **Matchstick** for.
-
-## Use Cases 🧰
-### Hydrating the store with a certain state
-Users are able to hydrate the store with a known set of entities. Here's an example to initialise the store with a Gravatar entity:
-```typescript
-let gravatar = new Gravatar("entryId");
-gravatar.save();
-```
-
-### Calling a mapping function with an event
-A user can create a custom event and pass it to a mapping function that is bound to the store:
-```typescript
-import { store } from "matchstick-as/assembly/store";
-import { NewGravatar } from "../../generated/Gravity/Gravity";
-import { handleNewGravatars, createNewGravatarEvent } from "./mapping";
-
-let newGravatarEvent = createNewGravatarEvent(12345, "0x89205A3A3b2A69De6Dbf7f01ED13B2108B2c43e7", "cap", "pac");
-
-handleNewGravatar(newGravatarEvent);
-```
-
-### Calling all of the mappings with event fixtures
-Users can call the mappings with test fixtures.
-
-`./tests/gravity/gravity.test.ts`
-```typescript
-import { NewGravatar } from "../../generated/Gravity/Gravity";
-import { store } from "matchstick-as/assembly/store";
-import { handleNewGravatars, createNewGravatarEvent } from "./mapping";
-
-let newGravatarEvent = createNewGravatarEvent(12345, "0x89205A3A3b2A69De6Dbf7f01ED13B2108B2c43e7", "cap", "pac");
-
-let anotherGravatarEvent = createNewGravatarEvent(3546, "0x89205A3A3b2A69De6Dbf7f01ED13B2108B2c43e7", "cap", "pac");
-
-handleNewGravatars([newGravatarEvent, anotherGravatarEvent]);
-```
-
-`./tests/gravity/utils.ts`
-```typescript
-import { handleNewGravatar } from "../../src/gravity"
-
-export function handleNewGravatars(events: NewGravatar[]): void {
-  events.forEach(event => {
+  events.forEach((event) => {
     handleNewGravatar(event)
   })
 }
 
-...
+export function createNewGravatarEvent(
+  id: i32,
+  ownerAddress: string,
+  displayName: string,
+  imageUrl: string,
+): NewGravatar {
+  let mockEvent = newMockEvent()
+  let newGravatarEvent = new NewGravatar(
+    mockEvent.address,
+    mockEvent.logIndex,
+    mockEvent.transactionLogIndex,
+    mockEvent.logType,
+    mockEvent.block,
+    mockEvent.transaction,
+    mockEvent.parameters,
+  )
+  newGravatarEvent.parameters = new Array()
+  let idParam = new ethereum.EventParam('id', ethereum.Value.fromI32(id))
+  let addressParam = new ethereum.EventParam(
+    'ownderAddress',
+    ethereum.Value.fromAddress(Address.fromString(ownerAddress)),
+  )
+  let displayNameParam = new ethereum.EventParam('displayName', ethereum.Value.fromString(displayName))
+  let imageUrlParam = new ethereum.EventParam('imageUrl', ethereum.Value.fromString(imageUrl))
+
+  newGravatarEvent.parameters.push(idParam)
+  newGravatarEvent.parameters.push(addressParam)
+  newGravatarEvent.parameters.push(displayNameParam)
+  newGravatarEvent.parameters.push(imageUrlParam)
+
+  return newGravatarEvent
+}
 ```
 
-### Mocking contract calls
-Users can mock contract calls:
+We first have to create a test file in our project. This is an example of how that might look like:
+
 ```typescript
-import { addMetadata, assert, createMockedFunction, clearStore, test } from "matchstick-as/assembly/index";
-import { Gravity } from "../../generated/Gravity/Gravity";
-import { Address, BigInt, ethereum } from "@graphprotocol/graph-ts";
+import { clearStore, test, assert } from 'matchstick-as/assembly/index'
+import { Gravatar } from '../../generated/schema'
+import { NewGravatar } from '../../generated/Gravity/Gravity'
+import { createNewGravatarEvent, handleNewGravatars } from '../mappings/gravity'
 
-let contractAddress = Address.fromString("0x89205A3A3b2A69De6Dbf7f01ED13B2108B2c43e7");
-let expectedResult = Address.fromString("0x90cBa2Bbb19ecc291A12066Fd8329D65FA1f1947");
-let bigIntParam = BigInt.fromString("1234");
-createMockedFunction(contractAddress, "gravatarToOwner", "gravatarToOwner(uint256):(address)")
-    .withArgs([ethereum.Value.fromSignedBigInt(bigIntParam)])
-    .returns([ethereum.Value.fromAddress(Address.fromString("0x90cBa2Bbb19ecc291A12066Fd8329D65FA1f1947"))]);
+test('Can call mappings with custom events', () => {
+  // Create a test entity and save it in the store as initial state (optional)
+  let gravatar = new Gravatar('gravatarId0')
+  gravatar.save()
 
-let gravity = Gravity.bind(contractAddress);
-let result = gravity.gravatarToOwner(bigIntParam);
+  // Create mock events
+  let newGravatarEvent = createNewGravatarEvent(12345, '0x89205A3A3b2A69De6Dbf7f01ED13B2108B2c43e7', 'cap', 'pac')
+  let anotherGravatarEvent = createNewGravatarEvent(3546, '0x89205A3A3b2A69De6Dbf7f01ED13B2108B2c43e7', 'cap', 'pac')
 
-assert.equals(ethereum.Value.fromAddress(expectedResult), ethereum.Value.fromAddress(result));
-```
-As demonstrated, in order to mock a contract call and hardcore a return value, the user must provide a contract address, function name, function signature, an array of arguments, and of course - the return value.
+  // Call mapping functions passing the events we just created
+  handleNewGravatars([newGravatarEvent, anotherGravatarEvent])
 
-Users can also mock function reverts:
-```typescript
-let contractAddress = Address.fromString("0x89205A3A3b2A69De6Dbf7f01ED13B2108B2c43e7");
-createMockedFunction(contractAddress, "getGravatar", "getGravatar(address):(string,string)")
-    .withArgs([ethereum.Value.fromAddress(contractAddress)])
-    .reverts();
-```
+  // Assert the state of the store
+  assert.fieldEquals('Gravatar', 'gravatarId0', 'id', 'gravatarId0')
+  assert.fieldEquals('Gravatar', '12345', 'owner', '0x89205A3A3b2A69De6Dbf7f01ED13B2108B2c43e7')
+  assert.fieldEquals('Gravatar', '3546', 'displayName', 'cap')
 
+  // Clear the store in order to start the next test off on a clean slate
+  clearStore()
+})
 
-### Mocking IPFS (not available in matchstick 0.4.0 or earlier versions)
-Users can mock IPFS files using `mockIpfsFile(hash, filePath)` function. The function accepts two arguments, the first one is the IPFS file hash/path and the second one is the path to a local file.
-
-NOTE: When testing `ipfs.map/ipfs.mapJSON`, you need to export the callback function (`export { processGravatar } from "./utils"`) like in the example bellow:
-
-tests/gravity/gravity.test.ts:
-```typescript
-import { assert, test, mockIpfsFile } from "matchstick-as/assembly/index"
-import { ipfs } from "@graphprotocol/graph-ts"
-import { gravatarFromIpfs } from "./utils"
-
-export { processGravatar } from "./utils"
-
-describe("IPFS", () => {
-  beforeAll(() => {
-    mockIpfsFile("ipfsCatFileHash", "tests/ipfs/cat.json")
-    mockIpfsFile("ipfsMapFileHash", "tests/ipfs/map.json")
-  })
-
-  afterEach(() => {
-    clearStore()
-  })
-
-  test("ipfs.cat", () => {
-    assert.entityCount(GRAVATAR_ENTITY_TYPE, 0)
-
-    gravatarFromIpfs()
-
-    assert.entityCount(GRAVATAR_ENTITY_TYPE, 1)
-    assert.fieldEquals(GRAVATAR_ENTITY_TYPE, "1", "imageUrl", "https://example.com/image1.png")
-  })
-
-  test("ipfs.map", () => {
-    assert.entityCount(GRAVATAR_ENTITY_TYPE, 0)
-
-    ipfs.map("ipfsMapFileHash", 'processGravatar', Value.fromString('Gravatar'), ['json'])
-
-    assert.entityCount(GRAVATAR_ENTITY_TYPE, 3)
-    assert.fieldEquals(GRAVATAR_ENTITY_TYPE, "1", "displayName", "Gravatar1")
-    assert.fieldEquals(GRAVATAR_ENTITY_TYPE, "2", "displayName", "Gravatar2")
-    assert.fieldEquals(GRAVATAR_ENTITY_TYPE, "3", "displayName", "Gravatar3")
-  })
+test('Next test', () => {
+  //...
 })
 ```
 
-tests/gravity/utils.ts:
+That's a lot to unpack! First off, an important thing to notice is that we're importing things from `matchstick-as`, our AssemblyScript helper library (distributed as an npm module). You can find the repository [here](https://github.com/LimeChain/matchstick-as). `matchstick-as` provides us with useful testing methods and also defines the `test()` function which we will use to build our test blocks. The rest of it is pretty straightforward - here's what happens:
+
+- We're setting up our initial state and adding one custom Gravatar entity;
+- We define two `NewGravatar` event objects along with their data, using the `createNewGravatarEvent()` function;
+- We're calling out handler methods for those events - `handleNewGravatars()` and passing in the list of our custom events;
+- We assert the state of the store. How does that work? - We're passing a unique combination of Entity type and id. Then we check a specific field on that Entity and assert that it has the value we expect it to have. We're doing this both for the initial Gravatar Entity we added to the store, as well as the two Gravatar entities that gets added when the handler function is called;
+- And lastly - we're cleaning the store using `clearStore()` so that our next test can start with a fresh and empty store object. We can define as many test blocks as we want.
+
+There we go - we've created our first test! 👏
+
+Now in order to run our tests you simply need to run the following in your subgraph root folder:
+
+`graph test Gravity`
+
+And if all goes well you should be greeted with the following:
+
+![Matchstick saying “All tests passed!”](./images/matchstick-tests-passed.png)
+
+## Common test scenarios
+
+### Hydrating the store with a certain state
+
+Users are able to hydrate the store with a known set of entities. Here's an example to initialise the store with a Gravatar entity:
+
+```typescript
+let gravatar = new Gravatar('entryId')
+gravatar.save()
+```
+
+### Calling a mapping function with an event
+
+A user can create a custom event and pass it to a mapping function that is bound to the store:
+
+```typescript
+import { store } from 'matchstick-as/assembly/store'
+import { NewGravatar } from '../../generated/Gravity/Gravity'
+import { handleNewGravatars, createNewGravatarEvent } from './mapping'
+
+let newGravatarEvent = createNewGravatarEvent(12345, '0x89205A3A3b2A69De6Dbf7f01ED13B2108B2c43e7', 'cap', 'pac')
+
+handleNewGravatar(newGravatarEvent)
+```
+
+### Calling all of the mappings with event fixtures
+
+Users can call the mappings with test fixtures.
+
+```typescript
+import { NewGravatar } from '../../generated/Gravity/Gravity'
+import { store } from 'matchstick-as/assembly/store'
+import { handleNewGravatars, createNewGravatarEvent } from './mapping'
+
+let newGravatarEvent = createNewGravatarEvent(12345, '0x89205A3A3b2A69De6Dbf7f01ED13B2108B2c43e7', 'cap', 'pac')
+
+let anotherGravatarEvent = createNewGravatarEvent(3546, '0x89205A3A3b2A69De6Dbf7f01ED13B2108B2c43e7', 'cap', 'pac')
+
+handleNewGravatars([newGravatarEvent, anotherGravatarEvent])
+```
+
+```
+export function handleNewGravatars(events: NewGravatar[]): void {
+    events.forEach(event => {
+        handleNewGravatar(event);
+    });
+}
+```
+
+### Mocking contract calls
+
+Users can mock contract calls:
+
+```typescript
+import { addMetadata, assert, createMockedFunction, clearStore, test } from 'matchstick-as/assembly/index'
+import { Gravity } from '../../generated/Gravity/Gravity'
+import { Address, BigInt, ethereum } from '@graphprotocol/graph-ts'
+
+let contractAddress = Address.fromString('0x89205A3A3b2A69De6Dbf7f01ED13B2108B2c43e7')
+let expectedResult = Address.fromString('0x90cBa2Bbb19ecc291A12066Fd8329D65FA1f1947')
+let bigIntParam = BigInt.fromString('1234')
+createMockedFunction(contractAddress, 'gravatarToOwner', 'gravatarToOwner(uint256):(address)')
+  .withArgs([ethereum.Value.fromSignedBigInt(bigIntParam)])
+  .returns([ethereum.Value.fromAddress(Address.fromString('0x90cBa2Bbb19ecc291A12066Fd8329D65FA1f1947'))])
+
+let gravity = Gravity.bind(contractAddress)
+let result = gravity.gravatarToOwner(bigIntParam)
+
+assert.equals(ethereum.Value.fromAddress(expectedResult), ethereum.Value.fromAddress(result))
+```
+
+As demonstrated, in order to mock a contract call and hardcore a return value, the user must provide a contract address, function name, function signature, an array of arguments, and of course - the return value.
+
+Users can also mock function reverts:
+
+```typescript
+let contractAddress = Address.fromString('0x89205A3A3b2A69De6Dbf7f01ED13B2108B2c43e7')
+createMockedFunction(contractAddress, 'getGravatar', 'getGravatar(address):(string,string)')
+  .withArgs([ethereum.Value.fromAddress(contractAddress)])
+  .reverts()
+```
+
+### Mocking IPFS files (old/deprecated)
+
+!Note: For testing `file/ipfs` templates see [here](#testing-fileipfs-templates)
+
+Users can mock IPFS files by using `mockIpfsFile(hash, filePath)` function. The function accepts two arguments, the first one is the IPFS file hash/path and the second one is the path to a local file.
+
+NOTE: When testing `ipfs.map/ipfs.mapJSON`, the callback function must be exported from the test file in order for matchstck to detect it, like the `processGravatar()` function in the test example bellow:
+
+`.test.ts` file:
+
+```typescript
+import { assert, test, mockIpfsFile } from 'matchstick-as/assembly/index'
+import { ipfs } from '@graphprotocol/graph-ts'
+import { gravatarFromIpfs } from './utils'
+
+// Export ipfs.map() callback in order for matchstck to detect it
+export { processGravatar } from './utils'
+
+test('ipfs.cat', () => {
+  mockIpfsFile('ipfsCatfileHash', 'tests/ipfs/cat.json')
+
+  assert.entityCount(GRAVATAR_ENTITY_TYPE, 0)
+
+  gravatarFromIpfs()
+
+  assert.entityCount(GRAVATAR_ENTITY_TYPE, 1)
+  assert.fieldEquals(GRAVATAR_ENTITY_TYPE, '1', 'imageUrl', 'https://i.ytimg.com/vi/MELP46s8Cic/maxresdefault.jpg')
+
+  clearStore()
+})
+
+test('ipfs.map', () => {
+  mockIpfsFile('ipfsMapfileHash', 'tests/ipfs/map.json')
+
+  assert.entityCount(GRAVATAR_ENTITY_TYPE, 0)
+
+  ipfs.map('ipfsMapfileHash', 'processGravatar', Value.fromString('Gravatar'), ['json'])
+
+  assert.entityCount(GRAVATAR_ENTITY_TYPE, 3)
+  assert.fieldEquals(GRAVATAR_ENTITY_TYPE, '1', 'displayName', 'Gravatar1')
+  assert.fieldEquals(GRAVATAR_ENTITY_TYPE, '2', 'displayName', 'Gravatar2')
+  assert.fieldEquals(GRAVATAR_ENTITY_TYPE, '3', 'displayName', 'Gravatar3')
+})
+```
+
+`utils.ts` file:
+
 ```typescript
 import { Address, ethereum, JSONValue, Value, ipfs, json, Bytes } from "@graphprotocol/graph-ts"
 import { Gravatar } from "../../generated/schema"
@@ -803,73 +758,88 @@ export function gravatarFromIpfs(): void {
 ```
 
 ### Asserting the state of the store
+
 Users are able to assert the final (or midway) state of the store through asserting entities. In order to do this, the user has to supply an Entity type, the specific ID of an Entity, a name of a field on that Entity, and the expected value of the field. Here's a quick example:
+
 ```typescript
-import { assert } from "matchstick-as/assembly/index";
-import { Gravatar } from "../generated/schema";
+import { assert } from 'matchstick-as/assembly/index'
+import { Gravatar } from '../generated/schema'
 
-let gravatar = new Gravatar("gravatarId0");
-gravatar.save();
+let gravatar = new Gravatar('gravatarId0')
+gravatar.save()
 
-assert.fieldEquals("Gravatar", "gravatarId0", "id", "gravatarId0");
-
+assert.fieldEquals('Gravatar', 'gravatarId0', 'id', 'gravatarId0')
 ```
+
 Running the assert.fieldEquals() function will check for equality of the given field against the given expected value. The test will fail and an error message will be outputted if the values are **NOT** equal. Otherwise the test will pass successfully.
 
 ### Interacting with Event metadata
+
 Users can use default transaction metadata, which could be returned as an ethereum.Event by using the `newMockEvent()` function. The following example shows how you can read/write to those fields on the Event object:
 
 ```typescript
-let logType = newGravatarEvent.logType;
+// Read
+let logType = newGravatarEvent.logType
 
-let UPDATED_ADDRESS = "0xB16081F360e3847006dB660bae1c6d1b2e17eC2A";
-newGravatarEvent.address = Address.fromString(UPDATED_ADDRESS);
+// Write
+let UPDATED_ADDRESS = '0xB16081F360e3847006dB660bae1c6d1b2e17eC2A'
+newGravatarEvent.address = Address.fromString(UPDATED_ADDRESS)
 ```
 
 ### Asserting variable equality
+
 ```typescript
 assert.equals(ethereum.Value.fromString("hello"); ethereum.Value.fromString("hello"));
-
-// String
-assert.stringEquals(DEFAULT_LOG_TYPE, newGravatarEvent.logType!);
-
-// Address
-assert.addressEquals(Address.fromString(DEFAULT_ADDRESS), newGravatarEvent.address);
-
-// BigInt
-assert.bigIntEquals(BigInt.fromI32(DEFAULT_LOG_INDEX), newGravatarEvent.logIndex);
-
-// Bytes & nested objects
-assert.bytesEquals((Bytes.fromHexString(DEFAULT_BLOCK_HASH) as Bytes), newGravatarEvent.block.hash);
 ```
 
 ### Asserting that an Entity is **not** in the store
-Users can assert that an entity does not exist in the store. If the entity is in fact in the store, the test will fail with a relevant error message. Here's a quick example of how to use this functionality:
+
+Users can assert that an entity does not exist in the store. The function takes an entity type and an id. If the entity is in fact in the store, the test will fail with a relevant error message. Here's a quick example of how to use this functionality:
 
 ```typescript
-assert.notInStore("Gravatar", "23");
+assert.notInStore('Gravatar', '23')
 ```
 
-### Printing the whole store (for debug purposes)
-You can print the whole store to the console using this helper function:
-```typescript
-import { logStore } from "matchstick-as/assembly/store";
+### Printing the whole store, or single entities from it (for debug purposes)
 
-logStore();
+You can print the whole store to the console using this helper function:
+
+```typescript
+import { logStore } from 'matchstick-as/assembly/store'
+
+logStore()
+```
+
+As of version 0.6.0, `logStore` no longer prints derived fields, instead users can use the new `logEntity` function. Of course `logEntity` can be used to print any entity, not just ones that have derived fields.
+`logEntity` takes the entity type, entity id and a `showRelated` flag to indicate if users want to print the related derived entities.
+
+```
+import { logEntity } from 'matchstick-as/assembly/store'
+
+
+logEntity("Gravatar", 23, true)
 ```
 
 ### Expected failure
-Users can have expected test failures, using the `shouldFail` flag on the `test()` functions:
+
+Users can have expected test failures, using the shouldFail flag on the test() functions:
+
 ```typescript
-test("Should throw an error", () => {
-  throw new Error();
-}, true);
+test(
+  'Should throw an error',
+  () => {
+    throw new Error()
+  },
+  true,
+)
 ```
 
-If the test is marked with `shouldFail = true` but **DOES NOT** fail, that will show up as an error in the logs and the test block will fail. Also, if it's marked with `shouldFail = false` (the default state), the test executor will crash.
+If the test is marked with shouldFail = true but DOES NOT fail, that will show up as an error in the logs and the test block will fail. Also, if it's marked with shouldFail = false (the default state), the test executor will crash.
 
 ### Logging
-Having custom logs in the unit tests is exactly the same as logging in the mappings. The difference is that the log object needs to be imported from `matchstick-as` rather than `graph-ts`. Here's a simple example with all non-critical log types:
+
+Having custom logs in the unit tests is exactly the same as logging in the mappings. The difference is that the log object needs to be imported from matchstick-as rather than graph-ts. Here's a simple example with all non-critical log types:
+
 ```typescript
 import { test } from "matchstick-as/assembly/index";
 import { log } from "matchstick-as/assembly/log";
@@ -892,269 +862,413 @@ test("Warning", () => {
 ```
 
 Users can also simulate a critical failure, like so:
+
 ```typescript
-test("Blow everything up", () => {
-    log.critical("Boom!");
-});
+test('Blow everything up', () => {
+  log.critical('Boom!')
+})
 ```
 
 Logging critical errors will stop the execution of the tests and blow everything up. After all - we want to make sure you're code doesn't have critical logs in deployment, and you should notice right away if that were to happen.
 
 ### Testing derived fields
-Testing derived fields is a feature which (as the example below shows) allows the user to set a virtual field in a certain entity and have another entity be loaded automatically if the derived field matches the id from the first entity.
 
+Testing derived fields is a feature which allows users to set a field on a certain entity and have another entity be updated automatically if it derives one of its fields from the first entity.
 
-`tests/token-lock-wallet/utils.ts`
+Before version `0.6.0` it was possible to get the derived entities by accessing them as entity fields/properties, like so:
 ```typescript
-import { GraphAccount, NameSignalTransaction } from "../../generated/schema";
-import { BigInt } from "@graphprotocol/graph-ts";
-
-export function mockGraphAccount(id: string): void {
-  let account = new GraphAccount(id);
-  account.createdAt = 0
-  account.operators = []
-  account.balance = BigInt.fromI32(0)
-  account.curationApproval = BigInt.fromI32(0)
-  account.stakingApproval = BigInt.fromI32(0)
-  account.gnsApproval = BigInt.fromI32(0)
-  account.subgraphQueryFees = BigInt.fromI32(0)
-  account.tokenLockWallets = []
-  account.save()
-}
-
-export function mockNameSignalTransaction(id: string, signer: string): void {
-  let nst = new NameSignalTransaction(id);
-  nst.signer = signer
-  nst.blockNumber = 1
-  nst.timestamp = 1
-  nst.type = "stake"
-  nst.nameSignal = BigInt.fromI32(1)
-  nst.versionSignal = BigInt.fromI32(1)
-  nst.tokens = BigInt.fromI32(1)
-  nst.subgraph = "1"
-  nst.save()
-}
+let entity = ExampleEntity.load("id")
+let derivedEntity = entity.derived_entity
 ```
 
-`tests/token-lock-wallet/token-lock-wallet.test.ts`
+As of version `0.6.0`, this is done by using the `loadRelated` function of graph-node, the derived entities can be accessed the same way as in the handlers.
+
 ```typescript
-describe("@derivedFrom fields", () => {
+test("Derived fields example test", () => {
+  let mainAccount = GraphAccount.load("12")!
+
+  assert.assertNull(mainAccount.get("nameSignalTransactions"))
+  assert.assertNull(mainAccount.get("operatorOf"))
+
+  let operatedAccount = GraphAccount.load("1")!
+  operatedAccount.operators = [mainAccount.id]
+  operatedAccount.save()
+  
+  mockNameSignalTransaction("1234", mainAccount.id)
+  mockNameSignalTransaction("2", mainAccount.id)
+
+  mainAccount = GraphAccount.load("12")!
+
+  assert.assertNull(mainAccount.get("nameSignalTransactions"))
+  assert.assertNull(mainAccount.get("operatorOf"))
+
+  const nameSignalTransactions = mainAccount.nameSignalTransactions.load();
+  const operatorsOfMainAccount = mainAccount.operatorOf.load();
+  
+  assert.i32Equals(2, nameSignalTransactions.length)
+  assert.i32Equals(1, operatorsOfMainAccount.length)
+
+  assert.stringEquals("1", operatorsOfMainAccount[0].id)
+
+  mockNameSignalTransaction("2345", mainAccount.id)
+
+  let nst = NameSignalTransaction.load("1234")!
+  nst.signer = "11"
+  nst.save()
+
+  store.remove("NameSignalTransaction", "2")
+
+  mainAccount = GraphAccount.load("12")!
+  assert.i32Equals(1, mainAccount.nameSignalTransactions.load().length)
+})
+```
+
+### Testing `loadInBlock`
+
+As of version `0.6.0`, users can test `loadInBlock` by using the `mockInBlockStore`, it allows mocking entities in the block cache.
+
+```typescript
+import { afterAll, beforeAll, describe, mockInBlockStore, test } from "matchstick-as"
+import { Gravatar } from "../../generated/schema"
+
+describe("loadInBlock", () => {
   beforeAll(() => {
-    mockGraphAccount("12")
-    mockGraphAccount("1")
+    mockInBlockStore("Gravatar", "gravatarId0", gravatar);
   })
 
   afterAll(() => {
-    clearStore()
+    clearInBlockStore()
   })
 
-  test("Derived fields example test", () => {
-    let mainAccount = GraphAccount.load("12")!
-
-    assert.assertNull(mainAccount.get("nameSignalTransactions"))
-    assert.assertNull(mainAccount.get("operatorOf"))
-
-    let operatedAccount = GraphAccount.load("1")!
-    operatedAccount.operators = [mainAccount.id]
-    operatedAccount.save()
-   
-    mockNameSignalTransaction("1234", mainAccount.id)
-    mockNameSignalTransaction("2", mainAccount.id)
-
-    mainAccount = GraphAccount.load("12")!
-
-    assert.assertNull(mainAccount.get("nameSignalTransactions"))
-    assert.assertNull(mainAccount.get("operatorOf"))
-
-    const nameSignalTransactions = mainAccount.nameSignalTransactions.load();
-    const operatorsOfMainAccount = mainAccount.operatorOf.load();
-    
-    assert.i32Equals(2, nameSignalTransactions.length)
-    assert.i32Equals(1, operatorsOfMainAccount.length)
-
-    assert.stringEquals("1", operatorsOfMainAccount[0].id)
-
-    mockNameSignalTransaction("2345", mainAccount.id)
-
-    let nst = NameSignalTransaction.load("1234")!
-    nst.signer = "11"
-    nst.save()
-
-    store.remove("NameSignalTransaction", "2")
-
-    mainAccount = GraphAccount.load("12")!
-    assert.i32Equals(1, mainAccount.nameSignalTransactions.load().length)
+  test("Can use entity.loadInBlock() to retrieve entity from cache store in the current block", () => {
+    let retrievedGravatar = Gravatar.loadInBlock("gravatarId0")
+    assert.stringEquals("gravatarId0", retrievedGravatar!.get("id")!.toString())
   })
+
+  test("Returns null when calling entity.loadInBlock() if an entity doesn't exist in the current block", () => {
+    let retrievedGravatar = Gravatar.loadInBlock("IDoNotExist")
+    assert.assertNull(retrievedGravatar)
+  })
+})
 ```
 
 ### Testing dynamic data sources
-Testing dynamic data sources can be be done by mocking the return value of the `context()`, `address()` and `network()` functions of the `dataSource` namespace.
-These functions currently return the following: context - returns an empty entity (DataSourceContext), address - returns "0x0000000000000000000000000000000000000000", network - returns "mainnet".
-The `create(...)` and `createWithContext(...)` functions are mocked to do nothing so they don't need to be called in the tests at all.
-Changes to the return values can be done through the functions of the `dataSourceMock` namespace in matchstick-as (version 0.3.0+). Example below:
+
+Testing dynamic data sources can be be done by mocking the return value of the `context()`, `address()` and `network()` functions of the dataSource namespace. These functions currently return the following: `context()` - returns an empty entity (DataSourceContext), `address()` - returns `0x0000000000000000000000000000000000000000`, `network()` - returns `mainnet`. The `create(...)` and `createWithContext(...)` functions are mocked to do nothing so they don't need to be called in the tests at all. Changes to the return values can be done through the functions of the `dataSourceMock` namespace in `matchstick-as` (version 0.3.0+).
+
+Example below:
+
 First we have the following event handler (which has been intentionally repurposed to showcase datasource mocking):
 
 ```typescript
 export function handleApproveTokenDestinations(event: ApproveTokenDestinations): void {
   let tokenLockWallet = TokenLockWallet.load(dataSource.address().toHexString())!
-  if (dataSource.network() == "rinkeby") {
+  if (dataSource.network() == 'rinkeby') {
     tokenLockWallet.tokenDestinationsApproved = true
   }
   let context = dataSource.context()
-  if (context.get("contextVal")!.toI32() > 0) {
-    tokenLockWallet.setBigInt("tokensReleased", BigInt.fromI32(context.get("contextVal")!.toI32()))
+  if (context.get('contextVal')!.toI32() > 0) {
+    tokenLockWallet.setBigInt('tokensReleased', BigInt.fromI32(context.get('contextVal')!.toI32()))
   }
   tokenLockWallet.save()
 }
 ```
-And then we have the test using one of the methods in the `dataSourceMock` namespace to set a new return value for all of the `dataSource` functions:
 
+And then we have the test using one of the methods in the dataSourceMock namespace to set a new return value for all of the dataSource functions:
 
 ```typescript
-import { assert, test, newMockEvent, dataSourceMock } from "matchstick-as/assembly/index"
-import { BigInt, DataSourceContext, Value } from "@graphprotocol/graph-ts"
+import { assert, test, newMockEvent, dataSourceMock } from 'matchstick-as/assembly/index'
+import { BigInt, DataSourceContext, Value } from '@graphprotocol/graph-ts'
 
-import { handleApproveTokenDestinations } from "../../src/token-lock-wallet"
-import { ApproveTokenDestinations } from "../../generated/templates/GraphTokenLockWallet/GraphTokenLockWallet"
-import { TokenLockWallet } from "../../generated/schema"
+import { handleApproveTokenDestinations } from '../../src/token-lock-wallet'
+import { ApproveTokenDestinations } from '../../generated/templates/GraphTokenLockWallet/GraphTokenLockWallet'
+import { TokenLockWallet } from '../../generated/schema'
 
-describe("dataSourceMock", () => {
-  beforeAll(() => {
-    let addressString = "0xA16081F360e3847006dB660bae1c6d1b2e17eC2A"
-    let address = Address.fromString(addressString)
+test('Data source simple mocking example', () => {
+  let addressString = '0xA16081F360e3847006dB660bae1c6d1b2e17eC2A'
+  let address = Address.fromString(addressString)
 
-    let wallet = new TokenLockWallet(address.toHexString())
-    // The following values should be set, because they are required fields,
-    // Since graph-cli 0.26.1, 0.27.1, 0.28.2 and 0.29.1, graph codegen will not generate
-    // default values for the required fields on .save()
-    wallet.manager = Address.zero()
-    wallet.initHash = Address.zero() as Bytes
-    wallet.beneficiary = Address.zero()
-    wallet.tokenDestinationsApproved = false
-    wallet.token = Bytes.fromHexString("0xc944e90c64b2c07662a292be6244bdf05cda44a7") // GRT
-    wallet.managedAmount = BigInt.fromI32(0)
-    wallet.startTime = BigInt.fromI32(0)
-    wallet.endTime = BigInt.fromI32(0)
-    wallet.periods = BigInt.fromI32(0)
-    wallet.releaseStartTime = BigInt.fromI32(0)
-    wallet.vestingCliffTime = BigInt.fromI32(0)
-    wallet.tokensReleased = BigInt.fromI32(0)
-    wallet.tokensWithdrawn = BigInt.fromI32(0)
-    wallet.tokensRevoked = BigInt.fromI32(0)
-    wallet.blockNumberCreated = BigInt.fromI32(0)
-    wallet.txHash = Address.zero() as Bytes
-    wallet.save()
+  let wallet = new TokenLockWallet(address.toHexString())
+  wallet.save()
+  let context = new DataSourceContext()
+  context.set('contextVal', Value.fromI32(325))
+  dataSourceMock.setReturnValues(addressString, 'rinkeby', context)
+  let event = changetype<ApproveTokenDestinations>(newMockEvent())
 
-    let context = new DataSourceContext()
-    context.set("contextVal", Value.fromI32(325))
+  assert.assertTrue(!wallet.tokenDestinationsApproved)
 
-    dataSourceMock.setReturnValues(addressString, "rinkeby", context)
-  })
+  handleApproveTokenDestinations(event)
 
-  afterAll(() => {
-    dataSourceMock.resetValues()
-  })
+  wallet = TokenLockWallet.load(address.toHexString())!
+  assert.assertTrue(wallet.tokenDestinationsApproved)
+  assert.bigIntEquals(wallet.tokensReleased, BigInt.fromI32(325))
 
-  test("Simple dataSource mocking example", () => {
-    let addressString = "0xA16081F360e3847006dB660bae1c6d1b2e17eC2A"
-    let address = Address.fromString(addressString)
-
-    let event = changetype<ApproveTokenDestinations>(newMockEvent())
-    let wallet = TokenLockWallet.load(address.toHexString())!
-
-    assert.assertTrue(!wallet.tokenDestinationsApproved)
-
-    handleApproveTokenDestinations(event)
-
-    wallet = TokenLockWallet.load(address.toHexString())!
-
-    assert.assertTrue(wallet.tokenDestinationsApproved)
-    assert.bigIntEquals(wallet.tokensReleased, BigInt.fromI32(325))
-  })
+  dataSourceMock.resetValues()
 })
 ```
-Notice that `dataSourceMock.resetValues()` is called at the end. That's because the values are remembered when they are changed and need to be reset if you want to go back to the default values.
 
-### Test run time duration in the log output
-The log output includes the test run duration. Here's an example:
+Notice that dataSourceMock.resetValues() is called at the end. That's because the values are remembered when they are changed and need to be reset if you want to go back to the default values.
 
-`Jul 09 14:54:42.420 INFO Program execution time: 10.06022ms`
+### Testing dynamic data source creation
+
+As of version `0.6.0`, it is possible to test if a new data source has been created from a template. This feature supports both ethereum/contract and file/ipfs templates. There are four functions for this:
+- `assert.dataSourceCount(templateName, expectedCount)` can be used to assert the expected count of data sources from the specified template
+- `assert.dataSourceExists(templateName, address/ipfsHash)` asserts that a data source with the specified identifier (could be a contract address or IPFS file hash) from a specified template was created
+- `logDataSources(templateName)` prints all data sources from the specified template to the console for debugging purposes
+- `readFile(path)` reads a JSON file that represents an IPFS file and returns the content as Bytes
+
+#### Testing `ethereum/contract` templates
+```typescript
+test("ethereum/contract dataSource creation example", () => {
+    // Assert there are no dataSources created from GraphTokenLockWallet template
+    assert.dataSourceCount("GraphTokenLockWallet", 0);
+
+    // Create a new GraphTokenLockWallet datasource with address 0xA16081F360e3847006dB660bae1c6d1b2e17eC2A
+    GraphTokenLockWallet.create(Address.fromString("0xA16081F360e3847006dB660bae1c6d1b2e17eC2A"));
+    
+    // Assert the dataSource has been created
+    assert.dataSourceCount("GraphTokenLockWallet", 1);
+    
+    // Add a second dataSource with context
+    let context = new DataSourceContext()
+    context.set("contextVal", Value.fromI32(325))
+    
+    GraphTokenLockWallet.createWithContext(Address.fromString("0xA16081F360e3847006dB660bae1c6d1b2e17eC2B"), context);
+    
+    // Assert there are now 2 dataSources 
+    assert.dataSourceCount("GraphTokenLockWallet", 2);
+
+    // Assert that a dataSource with address "0xA16081F360e3847006dB660bae1c6d1b2e17eC2B" was created
+    // Keep in mind that `Address` type is transformed to lower case when decoded, so you have to pass the address as all lower case when asserting if it exists
+    assert.dataSourceExists("GraphTokenLockWallet", "0xA16081F360e3847006dB660bae1c6d1b2e17eC2B".toLowerCase());
+    
+    logDataSources("GraphTokenLockWallet");
+  })
+```
+
+##### Example `logDataSource` output
+
+```bash
+🛠  {
+  "0xa16081f360e3847006db660bae1c6d1b2e17ec2a": {
+    "kind": "ethereum/contract",
+    "name": "GraphTokenLockWallet",
+    "address": "0xa16081f360e3847006db660bae1c6d1b2e17ec2a",
+    "context": null
+  },
+  "0xa16081f360e3847006db660bae1c6d1b2e17ec2b": {
+    "kind": "ethereum/contract",
+    "name": "GraphTokenLockWallet",
+    "address": "0xa16081f360e3847006db660bae1c6d1b2e17ec2b",
+    "context": {
+      "contextVal": {
+        "type": "Int",
+        "data": 325
+      }
+    }
+  }
+}
+```
+
+#### Testing `file/ipfs` templates
+Similarly to contract dynamic data sources, users can test test file datas sources and their handlers
+
+##### Example `subgraph.yaml`:
+```yaml
+...
+templates:
+ - kind: file/ipfs
+    name: GraphTokenLockMetadata
+    network: mainnet
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.6
+      language: wasm/assemblyscript
+      file: ./src/token-lock-wallet.ts
+      handler: handleMetadata
+      entities:
+        - TokenLockMetadata
+      abis:
+        - name: GraphTokenLockWallet
+          file: ./abis/GraphTokenLockWallet.json
+```
+
+##### Example `schema.graphql`:
+
+```graphql
+"""
+Token Lock Wallets which hold locked GRT
+"""
+type TokenLockMetadata @entity {
+  "The address of the token lock wallet"
+  id: ID!
+  "Start time of the release schedule"
+  startTime: BigInt!
+  "End time of the release schedule"
+  endTime: BigInt!
+  "Number of periods between start time and end time"
+  periods: BigInt!
+  "Time when the releases start"
+  releaseStartTime: BigInt!
+}
+```
+
+##### Example `metadata.json`:
+
+```json
+{
+    "startTime": 1,
+    "endTime": 1,
+    "periods": 1,
+    "releaseStartTime": 1
+}
+```
+
+##### Example handler:
+
+```typescript
+export function handleMetadata(content: Bytes): void {
+  // dataSource.stringParams() returns the File DataSource CID
+  // stringParam() will be mocked in the handler test
+  // for more info https://thegraph.com/docs/en/developing/creating-a-subgraph/#create-a-new-handler-to-process-files
+  let tokenMetadata = new TokenLockMetadata(dataSource.stringParam());
+  const value = json.fromBytes(content).toObject()
+  
+  if (value) {
+    const startTime = value.get('startTime')
+    const endTime = value.get('endTime')
+    const periods = value.get('periods')
+    const releaseStartTime = value.get('releaseStartTime')
+
+    if (startTime && endTime && periods && releaseStartTime) {
+      tokenMetadata.startTime = startTime.toBigInt()
+      tokenMetadata.endTime = endTime.toBigInt()
+      tokenMetadata.periods = periods.toBigInt()
+      tokenMetadata.releaseStartTime = releaseStartTime.toBigInt()
+    }
+
+    tokenMetadata.save()
+  }
+}
+```
+
+
+##### Example test:
+```typescript
+import { assert, test,  dataSourceMock, readFile } from "matchstick-as"
+import { Address, BigInt, Bytes, DataSourceContext, ipfs, json, store, Value } from "@graphprotocol/graph-ts"
+
+import { handleMetadata } from "../../src/token-lock-wallet"
+import { TokenLockMetadata } from "../../generated/schema"
+import { GraphTokenLockMetadata } from "../../generated/templates"
+
+test("file/ipfs dataSource creation example", () => {
+  // Generate the dataSource CID from the ipfsHash + ipfs path file
+  // For example QmaXzZhcYnsisuue5WRdQDH6FDvqkLQX1NckLqBYeYYEfm/example.json
+  const ipfshash = 'QmaXzZhcYnsisuue5WRdQDH6FDvqkLQX1NckLqBYeYYEfm'
+  const CID = `${ipfshash}/example.json`
+    
+  // Create a new dataSource using the generated CID
+  GraphTokenLockMetadata.create(CID);
+
+  // Assert the dataSource has been created
+  assert.dataSourceCount("GraphTokenLockMetadata", 1);
+  assert.dataSourceExists("GraphTokenLockMetadata", CID);
+  logDataSources("GraphTokenLockMetadata");
+
+  // Now we have to mock the dataSource metadata and specifically dataSource.stringParam()
+  // dataSource.stringParams actually uses the value of dataSource.address(), so we will mock the address using dataSourceMock from  matchstick-as 
+ // First we will reset the values and then use dataSourceMock.setAddress() to set the CID
+  dataSourceMock.resetValues()
+  dataSourceMock.setAddress(CID);
+
+  // Now we need to generate the Bytes to pass to the dataSource handler
+  // For this case we introduced a new function readFile, that reads a local json and returns the content as Bytes
+  const content = readFile(`path/to/metadata.json`)
+  handleMetadata(content)
+    
+ // Now we will test if a TokenLockMetadata was created
+ const metadata = TokenLockMetadata.load(CID);
+    
+  assert.bigIntEquals(metadata!.endTime, BigInt.fromI32(1))
+  assert.bigIntEquals(metadata!.periods, BigInt.fromI32(1))
+  assert.bigIntEquals(metadata!.releaseStartTime, BigInt.fromI32(1))
+  assert.bigIntEquals(metadata!.startTime, BigInt.fromI32(1))
+})
+```
+
 
 ## Test Coverage
 
-Using **Matchstick**, subgraph developers are able to run a script that will calculate the test coverage of the written unit tests. The tool only works on **Linux** and **MacOS**, but when we add support for Docker (see progress on that [here](https://github.com/LimeChain/matchstick/issues/222)) users should be able to use it on any machine and almost any OS.
+Using **Matchstick**, subgraph developers are able to run a script that will calculate the test coverage of the written unit tests.
 
-The test coverage tool is really simple - it takes the compiled test `wasm` binaries and converts them to `wat` files, which can then be easily inspected to see whether or not the handlers defined in `subgraph.yaml` have actually been called. Since code coverage (and testing as whole) is in very early stages in AssemblyScript and WebAssembly, **Matchstick** cannot check for branch coverage. Instead we rely on the assertion that if a given handler has been called, the event/function for it have been properly mocked.
+The test coverage tool takes the compiled test `wasm` binaries and converts them to `wat` files, which can then be easily inspected to see whether or not the handlers defined in `subgraph.yaml` have been called. Since code coverage (and testing as whole) is in very early stages in AssemblyScript and WebAssembly, **Matchstick** cannot check for branch coverage. Instead we rely on the assertion that if a given handler has been called, the event/function for it have been properly mocked.
 
 ### Prerequisites
+
 To run the test coverage functionality provided in **Matchstick**, there are a few things you need to prepare beforehand:
 
 #### Export your handlers
+
 In order for **Matchstick** to check which handlers are being run, those handlers need to be exported from the **test file**. So for instance in our example, in our gravity.test.ts file we have the following handler being imported:
-```ts
-import  { handleNewGravatar } from "../../src/gravity";
+
+```typescript
+import { handleNewGravatar } from '../../src/gravity'
 ```
+
 In order for that function to be visible (for it to be included in the `wat` file **by name**) we need to also export it, like this:
-```ts
-export { handleNewGravatar };
+
+```typescript
+export { handleNewGravatar }
 ```
 
 ### Usage
+
 Once that's all set up, to run the test coverage tool, simply run:
-```
+
+```sh
 graph test -- -c
 ```
+
 You could also add a custom `coverage` command to your `package.json` file, like so:
-```ts
+
+```typescript
  "scripts": {
     /.../
     "coverage": "graph test -- -c"
   },
 ```
 
-Hopefully that should execute the coverage tool without any issues. You should see something like this in the terminal:
-```
-$ graph test -- -c
-Skipping download/install step because binary already exists at /Users/petko/work/demo-subgraph/node_modules/binary-install-raw/bin/0.4.0
+That will execute the coverage tool and you should see something like this in the terminal:
 
-___  ___      _       _         _   _      _
-|  \/  |     | |     | |       | | (_)    | |
-| .  . | __ _| |_ ___| |__  ___| |_ _  ___| | __
-| |\/| |/ _` | __/ __| '_ \/ __| __| |/ __| |/ /
-| |  | | (_| | || (__| | | \__ \ |_| | (__|   <
-\_|  |_/\__,_|\__\___|_| |_|___/\__|_|\___|_|\_\
+![Matchstick coverage mode”](./images/coverage-mode.png)
 
-If you want to change the default tests folder location (./tests/) you can add 'testsFolder: ./example/path' to the outermost level of your subgraph.yaml
-Compiling...
+### Test run time duration in the log output
 
-Running in coverage report mode.
- ️
-Downloading necessary tools... 🛠️
-Building. This might take a while... ⌛️
-Reading generated test modules... 🔎️
-Generating coverage report 📝
+The log output includes the test run duration. Here's an example:
 
-Handlers for source 'cryptopunks':
-Handler 'handleAssign' is tested.
-Handler 'handlePunkTransfer' is not tested.
-Handler 'handlePunkOffered' is not tested.
-Handler 'handlePunkBidEntered' is not tested.
-Handler 'handlePunkBidWithdrawn' is not tested.
-Handler 'handlePunkBought' is not tested.
-Handler 'handlePunkNoLongerForSale' is not tested.
-Test coverage: 14% (1/7 handlers).
+`[Thu, 31 Mar 2022 13:54:54 +0300] Program executed in: 42.270ms.`
 
-Handlers for source 'WrappedPunks':
-Handler 'handleWrappedPunkTransfer' is not tested.
-Test coverage: 0% (0/1 handlers).
+## Common compiler errors
 
-Handlers for source 'Gravity':
-Handler 'handleNewGravatar' is tested.
-Handler 'handleUpdatedGravatar' is not tested.
-Handler 'handleCreateGravatar' is not tested.
-Test coverage: 33% (1/3 handlers).
+> Critical: Could not create WasmInstance from valid module with context: unknown import: wasi_snapshot_preview1::fd_write has not been defined
 
-Global test coverage: 18% (2/11 handlers).
+This means you have used `console.log` in your code, which is not supported by AssemblyScript. Please consider using the [Logging API](/developing/assemblyscript-api/#logging-api)
 
-✨  Done in 65.76s.
-```
+> ERROR TS2554: Expected ? arguments, but got ?.
+>
+> return new ethereum.Block(defaultAddressBytes, defaultAddressBytes, defaultAddressBytes, defaultAddress, defaultAddressBytes, defaultAddressBytes, defaultAddressBytes, defaultBigInt, defaultBigInt, defaultBigInt, defaultBigInt, defaultBigInt, defaultBigInt, defaultBigInt, defaultBigInt);
+>
+> in ~lib/matchstick-as/assembly/defaults.ts(18,12)
+>
+> ERROR TS2554: Expected ? arguments, but got ?.
+>
+> return new ethereum.Transaction(defaultAddressBytes, defaultBigInt, defaultAddress, defaultAddress, defaultBigInt, defaultBigInt, defaultBigInt, defaultAddressBytes, defaultBigInt);
+>
+> in ~lib/matchstick-as/assembly/defaults.ts(24,12)
+
+The mismatch in arguments is caused by mismatch in `graph-ts` and `matchstick-as`. The best way to fix issues like this one is to update everything to the latest released version.
+
+## Feedback
+
+If you have any questions, feedback, feature requests or just want to reach out, the best place would be The Graph Discord where we have a dedicated channel for Matchstick, called 🔥| unit-testing.
